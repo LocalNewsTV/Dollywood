@@ -7,6 +7,9 @@ TagManager:
   - bullet
   - Enemy
   - ammo
+  - EnemySpawn
+  - BossWall
+  - PlayerMelee
   layers:
   - Default
   - TransparentFX

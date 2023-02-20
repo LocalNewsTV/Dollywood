@@ -4606,6 +4606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 265428531661227738}
   - component: {fileID: 4978717471533174980}
+  - component: {fileID: 4449790261805391275}
   m_Layer: 0
   m_Name: RPG Launcher
   m_TagString: Untagged
@@ -4643,10 +4644,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 259ff1f639f771a44af9f02c8dd97f9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  cam: {fileID: 0}
   aimSize: 32
   ammoPrefab: {fileID: 4312041029458661026, guid: 5d66e96c2385da94892a30266d3f8649, type: 3}
   weapon: {fileID: 2130557075493694628}
+--- !u!114 &4449790261805391275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130557075493694628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e3eedc797580ce4da3ada7c4add3451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireRate: 0.8
 --- !u!1 &2312887485405467637
 GameObject:
   m_ObjectHideFlags: 0
