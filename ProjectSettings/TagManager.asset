@@ -10,6 +10,7 @@ TagManager:
   - EnemySpawn
   - BossWall
   - PlayerMelee
+  - RPG
   layers:
   - Default
   - TransparentFX

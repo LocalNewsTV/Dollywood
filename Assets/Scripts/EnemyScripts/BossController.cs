@@ -13,7 +13,7 @@ public class BossController : MonoBehaviour
     [SerializeField] private SpawnController sc;
     public enum EnemyStates { quarterHP, halfHP, passive, awakened }
     private EnemyStates state = EnemyStates.passive;
-    private int Health;
+    //private int Health;
     private float timeBetweenActions = 5f;
     private float timeToAction = 0;
     private float speedMin = 10;
@@ -21,7 +21,7 @@ public class BossController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Health = 100;
+        //Health = 100;
     }
 
     // Update is called once per frame

@@ -8,7 +8,7 @@ public class SceneController : MonoBehaviour
     [SerializeField] private GameObject Player;
     private GameObject enemy;
     private Vector3 spawnPoint = new Vector3(0, 0, 5);
-    private int maxEnemies = 4;
+    private int maxEnemies = 15;
     GameObject[] numEnemies;
     GameObject[] spawnPoints;
     private int minSpawn = 0;

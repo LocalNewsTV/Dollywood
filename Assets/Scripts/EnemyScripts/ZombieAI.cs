@@ -9,23 +9,19 @@ public class ZombieAI : MonoBehaviour
     private GameObject Player;
     private float health = 10;
     private EnemyStates state = EnemyStates.idle;
-    private Rigidbody rb;
     private float speed = 7f;
 
-    private float gravity = -9.8f;
-    private float yVelocity = 0.0f;
-    private float groundedYVelocity = -4.0f;
     public void SetPlayer(GameObject Player)
     {
         this.Player = Player;
-        rb = GetComponent<Rigidbody>();
     }
     public enum EnemyStates
     {
         active,
         idle,
         attack,
-        dead
+        dead,
+        wander
     }
     // Update is called once per frame
     void LateUpdate()
@@ -36,7 +32,6 @@ public class ZombieAI : MonoBehaviour
         Debug.Log(distance);
         if(state == EnemyStates.idle && distance < distanceToActive){ state = EnemyStates.active;} 
         else if(state == EnemyStates.active){
-            Debug.Log("I am in Active Mode");
             transform.LookAt(Player.transform);
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
             if(distance < distanceToAttack) { state = EnemyStates.attack; }
@@ -44,12 +39,14 @@ public class ZombieAI : MonoBehaviour
         }
         else if (state == EnemyStates.attack){
             if(distance > distanceToAttack) { state = EnemyStates.active; }
-            Debug.Log("I am in Attack Mode");
         }
         
     }
 
-  
+    void ChangeState(EnemyStates state)
+    {
+        this.state = state;
+    }
     private void TakeDamage(int damage)
     {
         health -= damage;
@@ -57,6 +54,11 @@ public class ZombieAI : MonoBehaviour
         {
             StartCoroutine(Die());
         }
+    }
+
+    public void SetToKill()
+    {
+        state = EnemyStates.active;
     }
     private IEnumerator Die()
     {
@@ -68,11 +70,15 @@ public class ZombieAI : MonoBehaviour
     {
         if (other.CompareTag("bullet"))
         {
-            TakeDamage(2);
+            TakeDamage(10);
         }
         else if (other.CompareTag("PlayerMelee"))
         {
             TakeDamage(9);
+        }
+        else if (other.CompareTag("RPG"))
+        {
+            TakeDamage(50);
         }
     }
 

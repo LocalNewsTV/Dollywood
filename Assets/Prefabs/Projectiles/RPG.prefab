@@ -920,7 +920,7 @@ GameObject:
   - component: {fileID: 6068287054583245845}
   m_Layer: 0
   m_Name: RPG
-  m_TagString: ammo
+  m_TagString: RPG
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

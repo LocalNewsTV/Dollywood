@@ -9,7 +9,7 @@ public class BreakableLights : MonoBehaviour
     [SerializeField] ParticleSystem particles;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("ammo"))
+        if (other.CompareTag("bullet") || other.CompareTag("PlayerMelee"))
         {
             Destroy(spotlight);
             this.gameObject.GetComponent<MeshRenderer>().material = blackOut;

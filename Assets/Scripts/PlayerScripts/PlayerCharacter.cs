@@ -31,6 +31,11 @@ public class PlayerCharacter : MonoBehaviour
     }
     void Update()
     {
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (Input.GetButtonDown("RPG") && haveRpg)
         {
             if (active) { active.SetActive(false); }

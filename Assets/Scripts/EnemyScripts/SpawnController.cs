@@ -30,11 +30,12 @@ public class SpawnController : MonoBehaviour
             }
         }
     }
-
     public void SpawnEnemy()
     {
         enemy = Instantiate(enemyPrefab);
         enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
         enemy.transform.LookAt(Player.transform);
+        enemy.GetComponent<ZombieAI>().SetPlayer(Player);
+        enemy.GetComponent<ZombieAI>().SetToKill();
     }
 }

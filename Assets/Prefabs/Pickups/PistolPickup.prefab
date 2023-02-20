@@ -101,6 +101,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2102243965561902, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1596680152464868465, guid: 0119674365331a247a50ac2209237443, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -129,11 +133,23 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3213042544925692099, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: casing
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3213042544925692099, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: spawnPos
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4149019143241000385, guid: 0119674365331a247a50ac2209237443, type: 3}
       propertyPath: m_Name
       value: PistolPickup
       objectReference: {fileID: 0}
     - target: {fileID: 4567237677333376416, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4640503411133627760, guid: 0119674365331a247a50ac2209237443, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
@@ -149,7 +165,15 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5995851708977321491, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6187751738796288684, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6208160701143290078, guid: 0119674365331a247a50ac2209237443, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
@@ -209,8 +233,21 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7886204549161968304, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8093275064532345161, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8406607763271407697, guid: 0119674365331a247a50ac2209237443, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5858211123394966175, guid: 0119674365331a247a50ac2209237443, type: 3}
+    - {fileID: 3213042544925692099, guid: 0119674365331a247a50ac2209237443, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0119674365331a247a50ac2209237443, type: 3}
 --- !u!4 &1093530325716778882 stripped
 Transform:
