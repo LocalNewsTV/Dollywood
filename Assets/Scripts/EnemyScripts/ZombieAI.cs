@@ -29,7 +29,6 @@ public class ZombieAI : MonoBehaviour
         transform.LookAt(Player.transform.position);
         float distance = Vector3.Distance(Player.transform.position, this.transform.position);
 
-        Debug.Log(distance);
         if(state == EnemyStates.idle && distance < distanceToActive){ state = EnemyStates.active;} 
         else if(state == EnemyStates.active){
             transform.LookAt(Player.transform);
@@ -62,7 +61,6 @@ public class ZombieAI : MonoBehaviour
     }
     private IEnumerator Die()
     {
-        Debug.Log("Enemy Dying");
         Destroy(this.gameObject);
         yield return null;
     }

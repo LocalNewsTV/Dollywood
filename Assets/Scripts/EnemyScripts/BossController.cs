@@ -8,12 +8,18 @@ public class BossController : MonoBehaviour
     [SerializeField] private BossFireObjects eye2;
     [SerializeField] private BossFireObjects handLeft;
     [SerializeField] private BossFireObjects handRight;
+    [SerializeField] private GameObject handL;
+    [SerializeField] private GameObject handR;
+    [SerializeField] private GameObject finalBoss;
     [SerializeField] private GameObject hands;
     [SerializeField] private BossMovement bm;
     [SerializeField] private SpawnController sc;
-    public enum EnemyStates { quarterHP, halfHP, passive, awakened }
+    [SerializeField] private SoundController sound;
+    public enum EnemyStates { quarterHP, halfHP, passive, awakened, dead }
     private EnemyStates state = EnemyStates.passive;
-    //private int Health;
+    private int Health;
+    private int handLeftHP;
+    private int handRightHP;
     private float timeBetweenActions = 5f;
     private float timeToAction = 0;
     private float speedMin = 10;
@@ -21,9 +27,45 @@ public class BossController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Health = 100;
+        Health = 1000;
+        handLeftHP = 150;
+        handRightHP = 150;
     }
 
+    private IEnumerator Die()
+    {
+        MeshRenderer mr = bm.GetComponent<MeshRenderer>();
+        sound.AlwaysLoveYou();
+        for(int i = 0; i < 11; i++)
+        {
+            mr.enabled = false;
+            yield return new WaitForSeconds(0.3f);
+            mr.enabled = true;
+        }
+        Destroy(finalBoss);
+        Destroy(this.gameObject);
+        
+    }
+    public void TakeDamage(int damage, string part = "")
+    {
+        Debug.Log(Health);
+        if (part.Equals("handLeft"))
+        {
+            handLeftHP -= damage;
+            if(handLeftHP < 0) { Destroy(handL); }
+        }
+        else if (part.Equals("handRight"))
+        {
+            handRightHP -= damage;
+            if (handRightHP < 0) { Destroy(handR); }
+        }
+        Health -= damage;
+        if(Health <= 0 && state != EnemyStates.dead)
+        {
+            state = EnemyStates.dead;
+            StartCoroutine(Die());
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -74,9 +116,9 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            eye1.Fire();
+            if (eye1) { eye1.Fire(); }
             yield return new WaitForSeconds(0.3f);
-            eye2.Fire();
+            if (eye2) { eye2.Fire(); }
             yield return new WaitForSeconds(0.3f);
         }
     }
@@ -84,10 +126,11 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            handLeft.Fire();
+            if (handLeft) { handLeft.Fire(); }
             yield return new WaitForSeconds(0.3f);
-            handRight.Fire();
+            if (handRight) { handRight.Fire(); }
             yield return new WaitForSeconds(0.3f);
+            if (!handRight && !handLeft) { StartCoroutine(ShootLasers(10)); }
         }
     }
 
@@ -95,10 +138,11 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            handLeft.FireRandom();
+            if (handLeft) { handLeft.FireRandom(); }
             yield return new WaitForSeconds(0.3f);
-            handRight.FireRandom();
+            if (handRight) { handRight.FireRandom(); }
             yield return new WaitForSeconds(0.3f);
+            if(!handRight && !handLeft) { StartCoroutine(ShootLasers(10)); }
         }
     }
 

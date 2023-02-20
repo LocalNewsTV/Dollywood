@@ -11,6 +11,8 @@ TagManager:
   - BossWall
   - PlayerMelee
   - RPG
+  - EnemyRPG
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX

@@ -8,6 +8,8 @@ public class BossFireObjects : MonoBehaviour
     [SerializeField] GameObject defaultObj;
     [SerializeField] float ObjectScale;
     [SerializeField] ProjectileLibrary pl;
+    [SerializeField] BossController bc;
+    [SerializeField] string partName;
     private GameObject ammunition;
     private Vector3 big = new Vector3(4, 4, 4);
 
@@ -30,6 +32,16 @@ public class BossFireObjects : MonoBehaviour
         {
             ammunition.transform.localScale = big;
         }
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        int damage = 0;
+        if (other.CompareTag("RPG")) { damage = 50; }
+        else if (other.CompareTag("bullet")) { damage = 10; }
+        else if (other.CompareTag("PlayerMelee")) { damage = 8; }
+        if(damage > 0) { bc.TakeDamage(damage, partName); }
         
     }
 }
