@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class Elevator : MonoBehaviour
 {
+    [SerializeField] string nextScene;
     private bool goUp = true;
     private float maxY;
     private float minY;
@@ -38,11 +39,17 @@ public class Elevator : MonoBehaviour
             rb.MovePosition(movement); //= movement;  
         }
     }
+    private IEnumerator next()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(nextScene);
+    }
     private void OnTriggerEnter(Collider other)
     {
 
         if (other.CompareTag("Player"))
         {
+            StartCoroutine(next());
             initialContact = true;
         }
     }

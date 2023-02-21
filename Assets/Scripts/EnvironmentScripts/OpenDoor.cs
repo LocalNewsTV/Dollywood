@@ -9,6 +9,7 @@ public class OpenDoor : MonoBehaviour
     private float speed = 3f;
     private bool returnToStart = false;
     [SerializeField] private bool lockedDoor = false;
+    [SerializeField] private bool PlayerOnly = false;
     [SerializeField] private GameObject door;
     // Start is called before the first frame update
     void Start()
@@ -17,10 +18,10 @@ public class OpenDoor : MonoBehaviour
         endX = startX + 3.6f;
 
     }
-
+    public void UnlockDoor() { lockedDoor = false; }
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && !lockedDoor)
+        if ((PlayerOnly && other.CompareTag("Player") || !PlayerOnly) && !lockedDoor)
         {
             returnToStart = false;
             if (door.transform.localPosition.x < endX)
@@ -31,7 +32,7 @@ public class OpenDoor : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if ((PlayerOnly && other.CompareTag("Player") || !PlayerOnly && other.tag != null) && !lockedDoor)
         {
             Debug.Log("Called");
             returnToStart = true;

@@ -76,6 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac7a8a42fe13fbc4c9b2e4fbec371296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockedDoor: 0
+  PlayerOnly: 0
   door: {fileID: 6384299742234005872}
 --- !u!1 &6384299742234005872
 GameObject:
@@ -91,7 +93,7 @@ GameObject:
   - component: {fileID: 6384299742234005643}
   - component: {fileID: 6384299742234005644}
   - component: {fileID: 6384299742234005639}
-  - component: {fileID: 6384299742234005638}
+  - component: {fileID: 4484802127613701032}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -107,7 +109,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6384299742234005872}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.8880005, y: 1.8, z: 0}
+  m_LocalPosition: {x: -1.5000038, y: 3, z: -0.00000023841858}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -241,70 +243,70 @@ MonoBehaviour:
   - m_Vertices: 0b0000000e00000012000000
   m_SharedTextures: []
   m_Positions:
-  - {x: -1.8656464, y: -1.5, z: 0.19999981}
-  - {x: 1.8, y: -1.5, z: 0.2}
-  - {x: -1.8656464, y: 1.5, z: 0.19999981}
-  - {x: 1.8, y: 1.5, z: 0.2}
-  - {x: 1.8, y: -1.5, z: 0.2}
-  - {x: 1.8, y: -1.5, z: -0.2}
-  - {x: 1.8, y: 1.5, z: 0.2}
-  - {x: 1.8, y: 1.5, z: -0.2}
-  - {x: 1.8, y: -1.5, z: -0.2}
-  - {x: -1.8656464, y: -1.5, z: -0.19999981}
-  - {x: 1.8, y: 1.5, z: -0.2}
-  - {x: -1.8656464, y: 1.5, z: -0.19999981}
-  - {x: -1.8656464, y: -1.5, z: -0.19999981}
-  - {x: -1.8656464, y: -1.5, z: 0.19999981}
-  - {x: -1.8656464, y: 1.5, z: -0.19999981}
-  - {x: -1.8656464, y: 1.5, z: 0.19999981}
-  - {x: -1.8656464, y: 1.5, z: 0.19999981}
-  - {x: 1.8, y: 1.5, z: 0.2}
-  - {x: -1.8656464, y: 1.5, z: -0.19999981}
-  - {x: 1.8, y: 1.5, z: -0.2}
-  - {x: -1.8656464, y: -1.5, z: -0.19999981}
-  - {x: 1.8, y: -1.5, z: -0.2}
-  - {x: -1.8656464, y: -1.5, z: 0.19999981}
-  - {x: 1.8, y: -1.5, z: 0.2}
+  - {x: -2, y: -3, z: 0.4}
+  - {x: 2, y: -3, z: 0.4}
+  - {x: -2, y: 3, z: 0.4}
+  - {x: 2, y: 3, z: 0.4}
+  - {x: 2, y: -3, z: 0.4}
+  - {x: 2, y: -3, z: -0.4}
+  - {x: 2, y: 3, z: 0.4}
+  - {x: 2, y: 3, z: -0.4}
+  - {x: 2, y: -3, z: -0.4}
+  - {x: -2, y: -3, z: -0.4}
+  - {x: 2, y: 3, z: -0.4}
+  - {x: -2, y: 3, z: -0.4}
+  - {x: -2, y: -3, z: -0.4}
+  - {x: -2, y: -3, z: 0.4}
+  - {x: -2, y: 3, z: -0.4}
+  - {x: -2, y: 3, z: 0.4}
+  - {x: -2, y: 3, z: 0.4}
+  - {x: 2, y: 3, z: 0.4}
+  - {x: -2, y: 3, z: -0.4}
+  - {x: 2, y: 3, z: -0.4}
+  - {x: -2, y: -3, z: -0.4}
+  - {x: 2, y: -3, z: -0.4}
+  - {x: -2, y: -3, z: 0.4}
+  - {x: 2, y: -3, z: 0.4}
   m_Textures0:
-  - {x: 1.8656464, y: -1.5}
-  - {x: -1.8, y: -1.5}
-  - {x: 1.8656464, y: 1.5}
-  - {x: -1.8, y: 1.5}
-  - {x: 0.2, y: -1.5}
-  - {x: -0.2, y: -1.5}
-  - {x: 0.2, y: 1.5}
-  - {x: -0.2, y: 1.5}
-  - {x: 1.8, y: -1.5}
-  - {x: -1.8656464, y: -1.5}
-  - {x: 1.8, y: 1.5}
-  - {x: -1.8656464, y: 1.5}
-  - {x: 0.19999981, y: -1.5}
-  - {x: -0.19999981, y: -1.5}
-  - {x: 0.19999981, y: 1.5}
-  - {x: -0.19999981, y: 1.5}
-  - {x: -1.8656464, y: 0.19999981}
-  - {x: 1.8, y: 0.2}
-  - {x: -1.8656464, y: -0.19999981}
-  - {x: 1.8, y: -0.2}
-  - {x: 1.8656464, y: -0.19999981}
-  - {x: -1.8, y: -0.2}
-  - {x: 1.8656464, y: 0.19999981}
-  - {x: -1.8, y: 0.2}
+  - {x: 2, y: -3}
+  - {x: -2, y: -3}
+  - {x: 2, y: 3}
+  - {x: -2, y: 3}
+  - {x: 0.4, y: -3}
+  - {x: -0.4, y: -3}
+  - {x: 0.4, y: 3}
+  - {x: -0.4, y: 3}
+  - {x: 2, y: -3}
+  - {x: -2, y: -3}
+  - {x: 2, y: 3}
+  - {x: -2, y: 3}
+  - {x: 0.4, y: -3}
+  - {x: -0.4, y: -3}
+  - {x: 0.4, y: 3}
+  - {x: -0.4, y: 3}
+  - {x: -2, y: 0.4}
+  - {x: 2, y: 0.4}
+  - {x: -2, y: -0.4}
+  - {x: 2, y: -0.4}
+  - {x: 2, y: -0.4}
+  - {x: -2, y: -0.4}
+  - {x: 2, y: 0.4}
+  - {x: -2, y: 0.4}
   m_Textures2: []
   m_Textures3: []
   m_Tangents:
-  - {x: -1, y: 0, z: -0.000000052846097, w: -1}
-  - {x: -1, y: 0, z: -0.000000052846097, w: -1}
-  - {x: -1, y: 0, z: -0.000000052846097, w: -1}
-  - {x: -1, y: 0, z: -0.000000052846097, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
+  - {x: -1, y: 0, z: 0, w: -1}
   - {x: 0, y: 0, z: 1, w: -1}
   - {x: 0, y: 0, z: 1, w: -1}
   - {x: 0, y: 0, z: 1, w: -1}
   - {x: 0, y: 0, z: 1, w: -1}
-  - {x: 1, y: 0, z: -0.000000052846097, w: -1}
-  - {x: 1, y: 0, z: -0.000000052846097, w: -1}
-  - {x: 1, y: 0, z: -0.000000052846097, w: -1}
-  - {x: 1, y: 0, z: -0.000000052846097, w: -1}
+  - {x: 1, y: 0, z: 0, w: -1}
+  - {x: 1, y: 0, z: 0, w: -1}
+  - {x: 1, y: 0, z: 0, w: -1}
+  - {x: 1, y: 0, z: 0, w: -1}
   - {x: 0, y: 0, z: -1, w: -1}
   - {x: 0, y: 0, z: -1, w: -1}
   - {x: 0, y: 0, z: -1, w: -1}
@@ -326,7 +328,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1497
+  m_VersionIndex: 1585
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -345,14 +347,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Shape:
     rid: 4933909186049474584
-  m_Size: {x: 3.6, y: 3, z: 0.4}
+  m_Size: {x: 4, y: 6, z: 0.8}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_PivotLocation: 0
   m_PivotPosition: {x: 0, y: 0, z: 0}
-  m_UnmodifiedMeshVersion: 1441
+  m_UnmodifiedMeshVersion: 1585
   m_ShapeBox:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 1.8, y: 1.5, z: 0.2}
+    m_Extent: {x: 2, y: 3, z: 0.4}
   references:
     version: 2
     RefIds:
@@ -378,7 +380,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 594fe0a1958644149b522bf633a881c3, type: 2}
+  - {fileID: 2100000, guid: a9d78c36f01e43d4c993f575c9e46a7d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -424,7 +426,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &6384299742234005638
+--- !u!65 &4484802127613701032
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -435,5 +437,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.6656463, y: 3, z: 0.4}
-  m_Center: {x: -0.032823205, y: 0, z: 0}
+  m_Size: {x: 4.000001, y: 6, z: 0.8000002}
+  m_Center: {x: -0.00000047683716, y: 0, z: 0}
