@@ -317,6 +317,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5014675437288778925, guid: 5d66e96c2385da94892a30266d3f8649, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5081092791563443563, guid: 5d66e96c2385da94892a30266d3f8649, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -467,4 +471,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7dbe9b28bd8514abf58b686da153a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemType: 5
   rotationSpeed: 45

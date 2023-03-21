@@ -4,11 +4,23 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
+    [SerializeField] PickUpOptions itemType;
     private float x;
     private float z;
     private float y;
     public float rotationSpeed = 45f;
+    
     // Start is called before the first frame update
+    public enum PickUpOptions
+    {
+        Dagger,
+        Pistol,
+        Pistol_Ammo,
+        Sword,
+        RPG,
+        RPG_Ammo,
+        MedKit,
+    }
     void Start()
     {
         x = transform.rotation.x;
@@ -21,8 +33,28 @@ public class Pickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("GameObject Destroyed");
-            Destroy(this.gameObject);
+            if (itemType == PickUpOptions.Dagger) {
+                Messenger.Broadcast(GameEvent.DAGGER_UNLOCK);
+            }
+            else if (itemType == PickUpOptions.Pistol){
+                Messenger.Broadcast(GameEvent.PISTOL_UNLOCK);
+            }
+            else if (itemType == PickUpOptions.Pistol_Ammo){
+                Messenger.Broadcast(GameEvent.PISTOL_AMMO_PICKUP);
+            }
+            else if (itemType == PickUpOptions.Sword){
+                Messenger.Broadcast(GameEvent.SWORD_UNLOCK);
+            }
+            else if (itemType == PickUpOptions.RPG){
+                Messenger.Broadcast(GameEvent.RPG_UNLOCK);
+            }
+            else if (itemType == PickUpOptions.RPG_Ammo){
+                Messenger.Broadcast(GameEvent.RPG_AMMO_PICKUP);
+            }
+            else if (itemType == PickUpOptions.MedKit){
+                Messenger.Broadcast(GameEvent.HEALTH_KIT_PICKUP);
+            }
+                Destroy(this.gameObject);
         }
 
     }

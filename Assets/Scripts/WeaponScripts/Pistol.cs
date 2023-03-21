@@ -17,10 +17,19 @@ public class Pistol : MonoBehaviour
     {
         fw = GetComponent<FireWeapon>();
     }
-    public void Fire()
+    public bool Fire()
     {
-        fw.FireAmmo();
-        EjectShellFromPistol();
+        if (timeSinceLastFire >= fireRate){
+            timeSinceLastFire = 0;
+            fw.FireAmmo();
+            EjectShellFromPistol();
+            return true;
+        }
+        return false;
+    }
+    private void Update()
+    {
+        timeSinceLastFire += Time.deltaTime;
     }
     void EjectShellFromPistol()
     {
@@ -28,15 +37,5 @@ public class Pistol : MonoBehaviour
             casingref.transform.position = spawnPos.TransformPoint(0, 0, 0);
             casingref.transform.rotation = transform.rotation;
             casingref.GetComponent<Rigidbody>().AddForce(10, 5, 0);
-    }
-
-    private void Update()
-    {
-        timeSinceLastFire += Time.deltaTime;
-        if (Input.GetMouseButtonDown(0) && timeSinceLastFire >= fireRate)
-        {
-            timeSinceLastFire = 0;
-            Fire();
-        }
     }
 }

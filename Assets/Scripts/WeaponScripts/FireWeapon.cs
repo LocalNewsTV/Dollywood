@@ -5,29 +5,19 @@ using UnityEngine;
 public class FireWeapon : MonoBehaviour
 {
     [SerializeField] Camera cam;
-    [SerializeField] private int aimSize = 16;
     [SerializeField] private GameObject ammoPrefab;
     [SerializeField] private GameObject weapon;
     private GameObject tracer;
     private Transform ammoSpawnPoint;
     // Start is called before the first frame update
     void Start(){ ammoSpawnPoint = weapon.transform.GetChild(0); }
-    private void OnGUI(){
-        GUIStyle style = new GUIStyle();
-        style.fontSize = aimSize;
-
-        float posX = cam.pixelWidth / 2 - aimSize / 4;
-        float posY = cam.pixelHeight / 2 - aimSize / 2;
-
-        GUI.Label(new Rect(posX, posY, aimSize, aimSize), "x", style);
-    }
-    // Update is called once per frame
     private IEnumerator SphereIndicator(Vector3 hitPosition)
     {
 
         tracer = Instantiate(ammoPrefab) as GameObject;
         tracer.transform.position = ammoSpawnPoint.TransformPoint(0, 0, 0);
-        tracer.transform.rotation = transform.rotation;
+        //tracer.transform.rotation = transform.rotation;
+        tracer.transform.LookAt(hitPosition);
         yield return new WaitForSeconds(1);
     }
     public void FireAmmo()

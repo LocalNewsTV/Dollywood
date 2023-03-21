@@ -6,7 +6,6 @@ public class AreaTwoTriggers : MonoBehaviour
 {
     [SerializeField] public triggers trig;
     [SerializeField] private bool SelfDestructAfterUse = false;
-    [SerializeField] private SceneControllerLevelTwo sc;
     public enum triggers
     {
         paintings,
@@ -20,12 +19,12 @@ public class AreaTwoTriggers : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if(trig == triggers.paintings) { sc.ShowDolly(); }
-            else if(trig == triggers.spawn1){ sc.SpawnOne(); }
-            else if(trig == triggers.spawn2){ sc.SpawnTwo(); }
-            else if(trig == triggers.spawn3) { sc.SpawnThree(); }
-            else if(trig == triggers.unlockStoreroom){ sc.unlockStoreroom(); }
-            else if(trig == triggers.unlockElevator){ sc.unlockElevator(); }
+            if(trig == triggers.paintings) { Messenger.Broadcast(GameEvent.REVEAL_PHOTOS); }
+            else if(trig == triggers.spawn1){ Messenger.Broadcast(GameEvent.ENEMY_SPAWN_A); }
+            else if(trig == triggers.spawn2){ Messenger.Broadcast(GameEvent.ENEMY_SPAWN_B); }
+            else if(trig == triggers.spawn3) { Messenger.Broadcast(GameEvent.ENEMY_SPAWN_C); }
+            else if(trig == triggers.unlockStoreroom){ Messenger.Broadcast(GameEvent.UNLOCK_DOOR_A); }
+            else if(trig == triggers.unlockElevator){ Messenger.Broadcast(GameEvent.UNLOCK_EXIT); }
             if (SelfDestructAfterUse) { Destroy(this.gameObject); }
         }
         

@@ -10,16 +10,26 @@ public class MeleeScript : MonoBehaviour
     private float rotationX = 0f;
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+    //    if (Input.GetMouseButton(0)){
+    //        rotationX += speed * Time.deltaTime;
+    //        rotationX = Mathf.Clamp(rotationX, minVert, maxVert);
+    //    }
+    //    else{
+    //        rotationX -= speed;
+    //        rotationX = Mathf.Clamp(rotationX, minVert, maxVert);
+    //    }
+    //    transform.localEulerAngles = new Vector3(rotationX, 0, 0);
+    //}
+
+    private IEnumerator CoSwing()
     {
-        if (Input.GetMouseButton(0)){
-            rotationX += speed * Time.deltaTime;
-            rotationX = Mathf.Clamp(rotationX, minVert, maxVert);
-        }
-        else{
-            rotationX -= speed;
-            rotationX = Mathf.Clamp(rotationX, minVert, maxVert);
-        }
-        transform.localEulerAngles = new Vector3(rotationX, 0, 0);
+        yield return new WaitForSeconds(1);
     }
+    public void Swing()
+    {
+
+    }
+
 }

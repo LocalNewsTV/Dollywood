@@ -7,26 +7,20 @@ public class RPGLauncher : MonoBehaviour
     [SerializeField] private float fireRate = 0.3f;
     private FireWeapon fw;
     private float timeSinceLastFire = 0;
-    private GameObject casingref;
     // Start is called before the first frame update
 
-    private void Start()
-    {
+    private void Start(){
         fw = GetComponent<FireWeapon>();
     }
-    public void Fire()
-    {
-        fw.FireAmmo();
-    }
-
-
-    private void Update()
-    {
-        timeSinceLastFire += Time.deltaTime;
-        if (Input.GetMouseButtonDown(0) && timeSinceLastFire >= fireRate)
-        {
+    public bool Fire(){
+        if (timeSinceLastFire >= fireRate){
             timeSinceLastFire = 0;
-            Fire();
+            fw.FireAmmo();
+            return true;
         }
+        return false;
+    }
+    private void Update(){
+        timeSinceLastFire += Time.deltaTime;
     }
 }

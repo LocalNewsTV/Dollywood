@@ -15,7 +15,14 @@ public class BossController : MonoBehaviour
     [SerializeField] private BossMovement bm;
     [SerializeField] private SpawnController sc;
     [SerializeField] private SoundController sound;
-    public enum EnemyStates { quarterHP, halfHP, passive, awakened, dead }
+    public enum EnemyStates { 
+        quarterHP,
+        halfHP, 
+        passive, 
+        awakened, 
+        dead 
+    }
+
     private EnemyStates state = EnemyStates.passive;
     private int Health;
     private int handLeftHP;
@@ -35,7 +42,7 @@ public class BossController : MonoBehaviour
     private IEnumerator Die()
     {
         MeshRenderer mr = bm.GetComponent<MeshRenderer>();
-        sound.AlwaysLoveYou();
+        //sound.AlwaysLoveYou();
         for(int i = 0; i < 11; i++)
         {
             mr.enabled = false;

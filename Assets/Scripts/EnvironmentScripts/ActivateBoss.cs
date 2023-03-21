@@ -14,7 +14,7 @@ public class ActivateBoss : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Bounds.SetActive(true);
-            sc.DarkColossus();
+            //sc.DarkColossus();
             bc.Awaken();
             Destroy(this.gameObject);
         }

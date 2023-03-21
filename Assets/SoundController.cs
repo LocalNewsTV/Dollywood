@@ -4,27 +4,27 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
-    [SerializeField] private GameObject friendInJesus;
-    [SerializeField] private GameObject darkColossus;
-    [SerializeField] private GameObject alwaysLoveYou;
-    GameObject currSong;
+    [SerializeField] AudioSource bgm;
+    public AudioClip[] songs;
+    public int bgmIndex;
+
+    private void Awake()
+    {
+        Messenger<int>.AddListener(GameEvent.MUSIC_CHANGED, OnMusicChanged);
+   
+    }
+    private void OnDestroy()
+    {
+        Messenger<int>.RemoveListener(GameEvent.MUSIC_CHANGED, OnMusicChanged);
+    }
+
+    private void OnMusicChanged(int volume)
+    {
+        bgm.volume = volume / 100.0f;
+    }
     void Start()
     {
-        currSong = friendInJesus;
-        currSong.SetActive(true);   
-    }
-
-    public void DarkColossus()
-    {
-        currSong.SetActive(false);
-        currSong = darkColossus;
-        currSong.SetActive(true);
-    }
-
-    public void AlwaysLoveYou()
-    {
-        currSong.SetActive(false);
-        currSong = alwaysLoveYou;
-        currSong.SetActive(true);
+        bgm.volume = PlayerPrefs.GetInt("music") / 100.0f;
+        bgm.PlayOneShot(songs[bgmIndex]);
     }
 }
