@@ -18,6 +18,23 @@ public class SceneControllerLevelTwo : MonoBehaviour
     GameObject[] numEnemies;
     GameObject[] spawnPoints;
 
+        void Awake(){
+            Messenger.AddListener(GameEvent.REVEAL_PHOTOS, ShowDolly);
+            Messenger.AddListener(GameEvent.ENEMY_SPAWN_A, SpawnOne);
+            Messenger.AddListener(GameEvent.ENEMY_SPAWN_B, SpawnTwo);
+            Messenger.AddListener(GameEvent.ENEMY_SPAWN_C, SpawnThree);
+            Messenger.AddListener(GameEvent.UNLOCK_DOOR_A, unlockStoreroom);
+            Messenger.AddListener(GameEvent.UNLOCK_EXIT, unlockElevator);
+        }
+        void OnDestroy(){
+            Messenger.RemoveListener(GameEvent.REVEAL_PHOTOS, ShowDolly);
+            Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_A, SpawnOne);
+            Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_B, SpawnTwo);
+            Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_C, SpawnThree);
+            Messenger.RemoveListener(GameEvent.UNLOCK_DOOR_A, unlockStoreroom);
+            Messenger.RemoveListener(GameEvent.UNLOCK_EXIT, unlockElevator);
+        }
+        
 
     public GameObject GetPlayer(){ return Player; }
     void Start() { 
