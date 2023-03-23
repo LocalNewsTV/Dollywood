@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SceneControllerLevelTwo : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private GameObject Player;
     [SerializeField] private Transform Spawn1;
     [SerializeField] private Transform Spawn2;
@@ -62,10 +62,9 @@ public class SceneControllerLevelTwo : MonoBehaviour
     {
         foreach(Transform spawnPoint in spawnList)
         {
-            enemy = Instantiate(enemyPrefab);
+            enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)]);
             enemy.transform.position = spawnPoint.transform.position;
-            float angle = Random.Range(0, 360);
-            enemy.transform.Rotate(0, angle, 0);
+            enemy.transform.Rotate(0, Random.Range(0, 360), 0);
             enemy.GetComponent<ZombieAI>().SetPlayer(Player);
             enemy.GetComponent<ZombieAI>().ChangeState(ZombieAI.EnemyStates.shamble);
         }

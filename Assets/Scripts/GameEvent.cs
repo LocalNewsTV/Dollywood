@@ -39,6 +39,8 @@ public static class GameEvent{
 
     public const string DISABLE_CROSSHAIR = "DISABLE_CROSSHAIR";
     public const string ENABLE_CROSSHAIR = "ENABLE_CROSSHAIR";
+    public const string NEXT_LEVEL = "NEXT_LEVEL";
+    public const string NEW_GAME = "NEW_GAME";
 
     //Weapon Unlocks
     public const string DAGGER_UNLOCK = "DAGGER_UNLOCK";

@@ -62,7 +62,24 @@ public class PlayerCharacter : MonoBehaviour
             Debug.Break();
         }
     }
+    public void OnNewGame()
+    {
+        PlayerPrefs.SetInt(GameTerms.SWORD_UNLOCKED, 0);
+        PlayerPrefs.SetInt(GameTerms.PISTOL_UNLOCKED, 0);
+        PlayerPrefs.SetInt(GameTerms.RPG_UNLOCKED, 0);
+        PlayerPrefs.SetInt(GameTerms.DAGGER_UNLOCKED, 0);
 
+        PlayerPrefs.SetInt(GameTerms.HEALTH, health);
+        PlayerPrefs.SetInt(GameTerms.PISTOL_AMMO, pistolAmmo);
+        PlayerPrefs.SetInt(GameTerms.RPG_AMMO, rpgAmmo);
+
+    }
+    public void SaveInfo()
+    {
+        PlayerPrefs.SetInt(GameTerms.HEALTH, health);
+        PlayerPrefs.SetInt(GameTerms.PISTOL_AMMO, pistolAmmo);
+        PlayerPrefs.SetInt(GameTerms.RPG_AMMO, rpgAmmo);
+    }
     private void OnGameActive()
     {
         this.enabled = true;
@@ -125,9 +142,15 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
     //Player picks up Dagger
-    public void OnDaggerUnlock() { haveDagger = true; }
+    public void OnDaggerUnlock() { 
+        haveDagger = true;
+        PlayerPrefs.SetInt(GameTerms.DAGGER_UNLOCKED, 1);
+    }
     //Player picks up Sword
-    public void OnSwordUnlock() { haveSword = true; }
+    public void OnSwordUnlock() { 
+        haveSword = true;
+        PlayerPrefs.SetInt(GameTerms.SWORD_UNLOCKED, 1);
+    }
     //Player Picks up Pistol Ammunition, broadcasts for UI Controller
     public void OnPistolAmmoPickup() { 
         pistolAmmo += 12; 
@@ -145,11 +168,13 @@ public class PlayerCharacter : MonoBehaviour
     }
     //Player unlocks Pistol
     public void OnPistolUnlock() {
+        PlayerPrefs.SetInt(GameTerms.PISTOL_UNLOCKED, 1);
         if (havePistol) { OnPistolAmmoPickup(); }
         havePistol = true;
     }
     //Player Unlocks RPG
     public void OnRPGUnlock() {
+        PlayerPrefs.SetInt(GameTerms.RPG_UNLOCKED, 1);
         if (haveRpg) { OnRPGAmmoPickup(); }
         haveRpg = true;
     }

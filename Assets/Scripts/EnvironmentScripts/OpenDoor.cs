@@ -6,7 +6,7 @@ public class OpenDoor : MonoBehaviour
 {
     private float startX;
     private float endX;
-    private float speed = 3f;
+    private float speed = 4.5f;
     private bool returnToStart = false;
     [SerializeField] private bool lockedDoor = false;
     [SerializeField] private bool PlayerOnly = false;

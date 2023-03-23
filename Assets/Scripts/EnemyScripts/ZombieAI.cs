@@ -1,24 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ZombieAI : MonoBehaviour
 {
-    [SerializeField] float distanceToActive = 5f;
+    [SerializeField] private EnemyStates state = EnemyStates.idle;
     [SerializeField] Animator anim;
-    private float distanceToAttack = 2.5f;
+    private NavMeshAgent agent;
+
+    private float distanceToActive = 15f;
     private GameObject Player;
     private float health = 10;
-    [SerializeField] private EnemyStates state = EnemyStates.idle;
+    
     private float time = 0;
     private Rigidbody rb;
     private int rotateTime = 2;
     private float obstacleRange = 1.5f;
     private float sphereRadius = 1.5f;
-    private float attackRange = 1.5f;
+    private float distanceToAttack = 3f;
+    private float attackRange = 2.75f;
+    private float distance;
+    private bool attackInProgress = false;
     public void SetPlayer(GameObject Player)
     {
         this.Player = Player;
+        agent = GetComponent<NavMeshAgent>();
+        Debug.Log(transform.position);
     }
     private void OnDrawGizmosSelected()
     {
@@ -32,8 +41,8 @@ public class ZombieAI : MonoBehaviour
     }
 
     public enum EnemyStates {
-        active,
         idle,
+        active,
         attack,
         dead,
         shamble
@@ -42,121 +51,119 @@ public class ZombieAI : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        agent.enabled= true;
+    }
+
+    private void AttackState()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, -9.81f, rb.velocity.z);
+        Debug.Log("attacking");
+        anim.SetTrigger("AttackPlayer");
+        if (!attackInProgress){
+            attackInProgress = true;
+            StartCoroutine(CheckIfHitPlayer());
+        }
+    }
+    private void ActiveState()
+    {
+        anim.SetFloat("speed_f", 6);
+        agent.SetDestination(Player.transform.position);
+
+    }
+
+    private void ShambleState()
+    {
+        anim.SetFloat("speed_f", 1);
+        time += Time.deltaTime;
+        if (time > rotateTime)
+        {
+            rotateTime = Random.Range(0, 6);
+            time = 0;
+        }
+    }
+    private void EnemyLookAtPlayer() {
+        var lookPos = Player.transform.position - transform.position;
+        lookPos.y = 0;
+        var rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, .05f);
     }
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance(Player.transform.position, this.transform.position);
+        distance = Vector3.Distance(Player.transform.position, this.transform.position);
         rb.AddForce(Vector3.down * 9.81f);
-        if((state == EnemyStates.idle || state == EnemyStates.shamble) && distance < distanceToActive){ 
-            state = EnemyStates.active;
-            anim.SetFloat("speed_f", 6);
-        } 
-        else if(state == EnemyStates.active){
-            //transform.LookAt(Player.transform);
 
-            var lookPos = Player.transform.position - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, .05f);
-
-            if (distance < distanceToAttack) { state = EnemyStates.attack; }
-
-        }
-        else if (state == EnemyStates.attack){
-            var lookPos = Player.transform.position - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 0.05f);
-
-            rb.velocity = new Vector3(rb.velocity.x,-9.81f,rb.velocity.z);
-            anim.SetTrigger("AttackPlayer");
-            StartCoroutine(CheckIfHitPlayer());
-            
-            if(distance > distanceToAttack) { 
-                state = EnemyStates.active; 
+        if (state != EnemyStates.dead) {
+            if (distance <= distanceToAttack) {
+                ChangeState(EnemyStates.attack);
+                AttackState();
             }
-        }
-        else if(state == EnemyStates.shamble)
-        { 
-            
-            anim.SetFloat("speed_f", 1);
-            time += Time.deltaTime;
-            if(time > rotateTime){
-                rotateTime = Random.Range(0, 6);
-                time = 0;
+            else if (distance <= distanceToActive) { 
+                ChangeState(EnemyStates.active);
+                ActiveState();
             }
-
+            else if (distance > distanceToActive) { 
+                ChangeState(EnemyStates.shamble); 
+                ShambleState();
+            }
+           
         }
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-
-        if (Physics.SphereCast(ray, sphereRadius, out hit) && state != EnemyStates.dead && state != EnemyStates.attack)
+        if (state != EnemyStates.dead && state != EnemyStates.attack)
         {
-            GameObject hitObject = hit.transform.gameObject;
-            if(hit.distance < obstacleRange && !hitObject.GetComponent<PlayerCharacter>() && !hitObject.GetComponent<ZombieAI>())
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit hit;
+
+            if (Physics.SphereCast(ray, sphereRadius, out hit))
             {
-                float turnAngle = Random.Range(-40, 40);
-                transform.Rotate(Vector3.up * turnAngle);
+                if (hit.distance < obstacleRange)
+                {
+                    float turnAngle = Random.Range(-40, 40);
+                    transform.Rotate(Vector3.up * turnAngle);
+                }
             }
         }
-        
     }
 
     public IEnumerator CheckIfHitPlayer(){
         yield return new WaitForSeconds(0.5f);
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        if (Physics.SphereCast(ray, sphereRadius, out hit))
-        {
-            GameObject hitObject = hit.transform.gameObject;
-            if (hitObject.GetComponent<PlayerCharacter>() && hit.distance < attackRange && state != EnemyStates.dead)
-            {
+        if(Vector3.Distance(Player.transform.position, this.transform.position) <= attackRange) {
                 Messenger<int>.Broadcast(GameEvent.PLAYER_TAKE_DAMAGE, 5);
-                float turnAngle = Random.Range(-110, 110);
-                transform.Rotate(Vector3.up * turnAngle);
-            }
         }
         yield return new WaitForSeconds(0.5f);
+        attackInProgress = false;
     }
     public void ChangeState(EnemyStates state){
         this.state = state;
     }
-    private void TakeDamage(int damage)
-    {
+    public void TakeDamage(int damage){
         health -= damage;
-        if(health <= 0)
-        {
+        if(health <= 0){
             StartCoroutine(Die());
         }
     }
 
-    public void SetToKill()
-    {
+
+    public void SetToKill(){
         anim.SetFloat("speed_f", 6);
         state = EnemyStates.active;
     }
-    private IEnumerator Die()
-    {
+    private IEnumerator Die(){
         anim.SetBool("alive_b", false);
         yield return new WaitForSeconds(1);
         Destroy(this.gameObject);
         
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("bullet"))
-        {
-            TakeDamage(10);
-        }
-        else if (other.CompareTag("PlayerMelee"))
-        {
-            TakeDamage(9);
-        }
-        else if (other.CompareTag("RPG"))
-        {
-            TakeDamage(50);
-        }
-    }
-
+    //private void OnTriggerEnter(Collider other){
+    //    if (other.CompareTag("bullet")){
+    //        TakeDamage(10);
+    //    }
+    //    else if (other.CompareTag("PlayerMelee"))
+    //    {
+    //        TakeDamage(9);
+    //    }
+    //    else if (other.CompareTag("RPG"))
+    //    {
+    //        TakeDamage(50);
+    //    }
+    //}
 }

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
-    [SerializeField] private BossFireObjects eye1;
-    [SerializeField] private BossFireObjects eye2;
-    [SerializeField] private BossFireObjects handLeft;
-    [SerializeField] private BossFireObjects handRight;
-    [SerializeField] private GameObject handL;
-    [SerializeField] private GameObject handR;
-    [SerializeField] private GameObject finalBoss;
+    [SerializeField] private Transform eye1;
+    [SerializeField] private Transform eye2;
+    [SerializeField] private Transform handLeft;
+    [SerializeField] private Transform handRight;
     [SerializeField] private GameObject hands;
     [SerializeField] private BossMovement bm;
-    [SerializeField] private SpawnController sc;
-    [SerializeField] private SoundController sound;
+    [SerializeField] GameObject[] projectileList;
+    [SerializeField] GameObject Player;
+    private const int missiles = 1;
+    private const int lasers = 0;
+    private Vector3 projScale = new Vector3(4, 4, 4);
     public enum EnemyStates { 
         quarterHP,
         halfHP, 
@@ -25,18 +25,21 @@ public class BossController : MonoBehaviour
 
     private EnemyStates state = EnemyStates.passive;
     private int Health;
-    private int handLeftHP;
-    private int handRightHP;
     private float timeBetweenActions = 5f;
     private float timeToAction = 0;
     private float speedMin = 10;
     private float speedMax = 31;
     // Start is called before the first frame update
-    void Start()
+
+    void Awake(){
+        Messenger.AddListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
+    }
+    private void OnDestroy()
     {
+        Messenger.RemoveListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
+    }
+    void Start(){
         Health = 1000;
-        handLeftHP = 150;
-        handRightHP = 150;
     }
 
     private IEnumerator Die()
@@ -49,23 +52,11 @@ public class BossController : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             mr.enabled = true;
         }
-        Destroy(finalBoss);
         Destroy(this.gameObject);
         
     }
     public void TakeDamage(int damage, string part = "")
     {
-        Debug.Log(Health);
-        if (part.Equals("handLeft"))
-        {
-            handLeftHP -= damage;
-            if(handLeftHP < 0) { Destroy(handL); }
-        }
-        else if (part.Equals("handRight"))
-        {
-            handRightHP -= damage;
-            if (handRightHP < 0) { Destroy(handR); }
-        }
         Health -= damage;
         if(Health <= 0 && state != EnemyStates.dead)
         {
@@ -85,11 +76,9 @@ public class BossController : MonoBehaviour
         }
     }
 
-    public void Awaken()
-    {
+    public void OnStartBossFight(){
         hands.SetActive(true);
         state = EnemyStates.awakened;
-        bm.Awaken();
     }
 
     void bossAction()
@@ -123,9 +112,9 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            if (eye1) { eye1.Fire(); }
+            if (eye1) { FireLasers(eye1); }
             yield return new WaitForSeconds(0.3f);
-            if (eye2) { eye2.Fire(); }
+            if (eye2) { FireLasers(eye2); }
             yield return new WaitForSeconds(0.3f);
         }
     }
@@ -133,11 +122,10 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            if (handLeft) { handLeft.Fire(); }
+            if (handLeft) { FireRockets(handLeft); }
             yield return new WaitForSeconds(0.3f);
-            if (handRight) { handRight.Fire(); }
+            if (handRight) { FireRockets(handRight); }
             yield return new WaitForSeconds(0.3f);
-            if (!handRight && !handLeft) { StartCoroutine(ShootLasers(10)); }
         }
     }
 
@@ -145,9 +133,9 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            if (handLeft) { handLeft.FireRandom(); }
+            if (handLeft) { FireRandom(handLeft); }
             yield return new WaitForSeconds(0.3f);
-            if (handRight) { handRight.FireRandom(); }
+            if (handRight) { FireRandom(handRight); }
             yield return new WaitForSeconds(0.3f);
             if(!handRight && !handLeft) { StartCoroutine(ShootLasers(10)); }
         }
@@ -157,10 +145,35 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-            sc.SpawnEnemy();
+           // sc.SpawnEnemy();
             yield return new WaitForSeconds(0.5f);
-            sc.SpawnEnemy();
+            //sc.SpawnEnemy();
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+
+
+    public void FireRandom(Transform pos) {
+        GameObject ammunition = Instantiate(projectileList[Random.Range(0, projectileList.Length)]);
+        StartCoroutine(LaunchItem(ammunition, pos));
+    }
+
+    public void FireLasers(Transform pos) {
+        GameObject ammunition = Instantiate(projectileList[lasers]);
+        StartCoroutine(LaunchItem(ammunition, pos));
+    }
+    public void FireRockets(Transform pos) {
+        GameObject ammunition = Instantiate(projectileList[missiles]);
+        StartCoroutine(LaunchItem(ammunition, pos));
+    }
+    private IEnumerator LaunchItem(GameObject ammunition, Transform pos) {
+        ammunition.transform.position = pos.transform.TransformPoint(Vector3.forward);
+        ammunition.transform.LookAt(Player.transform);
+        yield return new WaitForSeconds(0.1f);
+        if (ammunition) {
+            ammunition.transform.localScale = projScale;
+        }
+
     }
 }

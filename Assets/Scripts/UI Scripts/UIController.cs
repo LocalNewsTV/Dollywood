@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEditor.VersionControl;
 
 public class UIController : MonoBehaviour
 {
@@ -36,7 +34,7 @@ public class UIController : MonoBehaviour
         Messenger.AddListener(GameEvent.PISTOL_AMMO_PICKUP, OnPickupAmmo);
         Messenger.AddListener(GameEvent.HEALTH_KIT_PICKUP, OnHealthkitPickup);
         Messenger<float>.AddListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
-        Messenger.AddListener(GameEvent.FADE_OUT, OnFadeOut);
+        Messenger.AddListener(GameEvent.NEXT_LEVEL, OnFadeOut);
     }
     private void OnDestroy(){
         Messenger.RemoveListener(GameEvent.POPUP_OPENED, OnPopupOpened);
@@ -51,6 +49,8 @@ public class UIController : MonoBehaviour
         Messenger.RemoveListener(GameEvent.RPG_AMMO_PICKUP, OnPickupAmmo);
         Messenger.RemoveListener(GameEvent.PISTOL_AMMO_PICKUP, OnPickupAmmo);
         Messenger.RemoveListener(GameEvent.HEALTH_KIT_PICKUP, OnHealthkitPickup);
+        Messenger<float>.RemoveListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
+        Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnFadeOut);
     }
     private void OnFadeOut(){
         StartCoroutine(FadeToBlack());
@@ -63,7 +63,7 @@ public class UIController : MonoBehaviour
         {
             black.a += 0.01f;
             img.color = black;
-            yield return new WaitForSeconds(0.002f);
+            yield return new WaitForSeconds(0.08f);
         }
     }
     private void OnPlayerHeal(float percent){

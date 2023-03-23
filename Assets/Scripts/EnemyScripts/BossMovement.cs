@@ -18,10 +18,10 @@ public class BossMovement : MonoBehaviour
     private int timeToWait = 4;
     private bool active = false;
 
-    public void Awaken()
+    public void OnStartBossFight()
     {
-
         active = true;
+        TargetNextWaypoint();
     }
     public void ChangeSpeed(float speed)
     {
@@ -29,18 +29,21 @@ public class BossMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (active)
-        {
+        if (active) {
             MoveTowardsWaypoint();
             transform.LookAt(player.transform);
         }
     }
 
-    void Start()
-    {
-        TargetNextWaypoint();
+    void Start(){
+        
     }
-
+    private void Awake(){
+        Messenger.AddListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
+    }
+    private void OnDestroy(){
+        Messenger.RemoveListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
+    }
 
     // Determine what waypoint we are going to next, and set associated variables
     private void TargetNextWaypoint()

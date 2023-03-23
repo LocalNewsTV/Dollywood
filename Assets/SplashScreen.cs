@@ -17,5 +17,9 @@ public class SplashScreen : MonoBehaviour
         {
             SceneManager.LoadScene("Area1");
         }
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 }

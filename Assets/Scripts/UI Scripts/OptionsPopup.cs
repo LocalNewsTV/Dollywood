@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class OptionsPopup : BasePopup
 {
     [SerializeField] private SettingsPopup settingsPopup;
-    [SerializeField] string currentMap;
     override public void Open() {
         base.Open();
     }
@@ -28,6 +27,6 @@ public class OptionsPopup : BasePopup
 
     public void OnRestartButton()
     {
-        Messenger<string>.Broadcast(GameEvent.RESTART_CURRENT_MAP, currentMap);
+        Messenger.Broadcast(GameEvent.RESTART_CURRENT_MAP);
     }
 }
