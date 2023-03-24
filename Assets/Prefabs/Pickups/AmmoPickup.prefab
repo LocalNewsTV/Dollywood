@@ -4038,7 +4038,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.4273318, g: 0.6006631, b: 0.9339623, a: 1}
-  m_Intensity: 0.75
+  m_Intensity: 1.25
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4135,7 +4135,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3262337005554469975
 Rigidbody:

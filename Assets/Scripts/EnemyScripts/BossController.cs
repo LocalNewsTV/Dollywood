@@ -12,9 +12,10 @@ public class BossController : MonoBehaviour
     [SerializeField] private BossMovement bm;
     [SerializeField] GameObject[] projectileList;
     [SerializeField] GameObject Player;
+
     private const int missiles = 1;
     private const int lasers = 0;
-    private Vector3 projScale = new Vector3(4, 4, 4);
+    private Vector3 projScale = new Vector3(5, 5, 5);
     public enum EnemyStates { 
         quarterHP,
         halfHP, 
@@ -24,7 +25,7 @@ public class BossController : MonoBehaviour
     }
 
     private EnemyStates state = EnemyStates.passive;
-    private int Health;
+    private int health;
     private float timeBetweenActions = 5f;
     private float timeToAction = 0;
     private float speedMin = 10;
@@ -39,39 +40,36 @@ public class BossController : MonoBehaviour
         Messenger.RemoveListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
     }
     void Start(){
-        Health = 1000;
+        health = 10;
     }
 
     private IEnumerator Die()
     {
-        MeshRenderer mr = bm.GetComponent<MeshRenderer>();
+        MeshRenderer mr = GetComponent<MeshRenderer>();
         //sound.AlwaysLoveYou();
-        for(int i = 0; i < 11; i++)
-        {
-            mr.enabled = false;
-            yield return new WaitForSeconds(0.3f);
-            mr.enabled = true;
+        for(int i = 0; i < 11; i++){
+            mr.enabled = !mr.enabled;
+            yield return new WaitForSeconds(0.2f);
         }
         Destroy(this.gameObject);
         
     }
-    public void TakeDamage(int damage, string part = "")
-    {
-        Health -= damage;
-        if(Health <= 0 && state != EnemyStates.dead)
-        {
-            state = EnemyStates.dead;
-            StartCoroutine(Die());
+    public void TakeDamage(int damage){
+        if (state != EnemyStates.passive){
+            health -= damage;
+            if (health <= 0 && state != EnemyStates.dead){
+                state = EnemyStates.dead;
+                StartCoroutine(Die());
+            }
         }
     }
     // Update is called once per frame
-    void Update()
-    {
-        timeToAction += Time.deltaTime;
-        if (timeToAction >= timeBetweenActions){
-            timeToAction = 0;
-            if (state != EnemyStates.passive){
-                bossAction();
+    void Update(){
+        if(state != EnemyStates.passive) { 
+            timeToAction += Time.deltaTime;
+            if (timeToAction >= timeBetweenActions){
+                timeToAction = 0;
+                BossAction();
             }
         }
     }
@@ -81,31 +79,34 @@ public class BossController : MonoBehaviour
         state = EnemyStates.awakened;
     }
 
-    void bossAction()
-    {
-        float action = Random.Range(1, 6);
-        int rounds = 0;
-        switch (action)
+    void BossAction(){
+        if (Random.Range(0, 20) == 3) { Messenger.Broadcast(GameEvent.BOSS_SPAWN_ALL); }
+        else
         {
-            case 1:
-                rounds = Random.Range(1, 8);
-                StartCoroutine(ShootLasers(rounds));
-                break;
-            case 2:
-                rounds = Random.Range(1, 4);
-                StartCoroutine(ShootRockets(rounds));
-                break;
-            case 3:
-                bm.ChangeSpeed(Random.Range(speedMin, speedMax));
-                break;
-            case 4:
-                rounds = Random.Range(3, 5);
-                StartCoroutine(ShootRandom(rounds));
-                break;
-            case 5:
-                rounds = Random.Range(1, 3);
-                StartCoroutine(SummonAdds(rounds));
-                break;
+            float action = Random.Range(1, 6);
+            int rounds = 0;
+            switch (action)
+            {
+                case 1:
+                    rounds = Random.Range(1, 8);
+                    StartCoroutine(ShootLasers(rounds));
+                    break;
+                case 2:
+                    rounds = Random.Range(1, 4);
+                    StartCoroutine(ShootRockets(rounds));
+                    break;
+                case 3:
+                    bm.ChangeSpeed(Random.Range(speedMin, speedMax));
+                    break;
+                case 4:
+                    rounds = Random.Range(3, 5);
+                    StartCoroutine(ShootRandom(rounds));
+                    break;
+                case 5:
+                    rounds = Random.Range(1, 3);
+                    StartCoroutine(SummonAdds(rounds));
+                    break;
+            }
         }
     }
     private IEnumerator ShootLasers(int rounds)
@@ -145,9 +146,9 @@ public class BossController : MonoBehaviour
     {
         for (int i = 0; i < rounds; i++)
         {
-           // sc.SpawnEnemy();
+            Messenger.Broadcast(GameEvent.BOSS_SPAWN_ONE);
             yield return new WaitForSeconds(0.5f);
-            //sc.SpawnEnemy();
+            Messenger.Broadcast(GameEvent.BOSS_SPAWN_ONE);
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -174,6 +175,5 @@ public class BossController : MonoBehaviour
         if (ammunition) {
             ammunition.transform.localScale = projScale;
         }
-
     }
 }

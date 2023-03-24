@@ -25,8 +25,7 @@ public class OptionsPopup : BasePopup
         Close();
     }
 
-    public void OnRestartButton()
-    {
+    public void OnRestartButton(){
         Messenger.Broadcast(GameEvent.RESTART_CURRENT_MAP);
     }
 }

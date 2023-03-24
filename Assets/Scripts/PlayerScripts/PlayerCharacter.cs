@@ -21,7 +21,12 @@ public class PlayerCharacter : MonoBehaviour
     private int rpgAmmo;
 
     private int maxHealth = 100;
+    private float invulnerablePeriod = 0.5f;
+    private float timeSinceLastHit = 0;
 
+    private bool godmode = false;
+
+    private Vector3 spawnPoint;
 
     private GameObject active;//Currently Active Weapon ref.
 
@@ -53,17 +58,18 @@ public class PlayerCharacter : MonoBehaviour
 
         active = null;
     }
-    public void Hit()
-    {
-        health -= 5;
-        Messenger<float>.Broadcast(GameEvent.PLAYER_HIT, (float)health / 100.0f);
-        if (health == 0)
-        {
-            Debug.Break();
-        }
+
+    void Respawn(){
+        Debug.Log("Respawning");
+        CharacterController player = gameObject.GetComponent<CharacterController>();
+        player.enabled = false;
+        Debug.Log(gameObject.transform.position);
+        Debug.Log(spawnPoint);
+        gameObject.transform.position = spawnPoint;
+        player.enabled = true;
     }
-    public void OnNewGame()
-    {
+    public void ChangeSpawnPoint(Vector3 pos){ spawnPoint = pos; }
+    public void OnNewGame(){
         PlayerPrefs.SetInt(GameTerms.SWORD_UNLOCKED, 0);
         PlayerPrefs.SetInt(GameTerms.PISTOL_UNLOCKED, 0);
         PlayerPrefs.SetInt(GameTerms.RPG_UNLOCKED, 0);
@@ -74,22 +80,16 @@ public class PlayerCharacter : MonoBehaviour
         PlayerPrefs.SetInt(GameTerms.RPG_AMMO, rpgAmmo);
 
     }
-    public void SaveInfo()
-    {
+    public void SaveInfo(){
         PlayerPrefs.SetInt(GameTerms.HEALTH, health);
         PlayerPrefs.SetInt(GameTerms.PISTOL_AMMO, pistolAmmo);
         PlayerPrefs.SetInt(GameTerms.RPG_AMMO, rpgAmmo);
     }
-    private void OnGameActive()
-    {
-        this.enabled = true;
-    }
-    private void OnGameInactive()
-    {
-        this.enabled = false;
-    }
+    private void OnGameActive(){ this.enabled = true; }
+    private void OnGameInactive(){ this.enabled = false; }
     void Update()
     {
+        timeSinceLastHit += Time.deltaTime;
         //Player Changed Equipment Options
         if (Input.GetButtonDown("RPG") && haveRpg){
             if (active) { active.SetActive(false); }
@@ -118,7 +118,7 @@ public class PlayerCharacter : MonoBehaviour
 
         //Test Button for Taking Damage
         if (Input.GetKeyDown(KeyCode.F1)) {
-            OnPlayerHit(10);
+            if (!godmode){ OnPlayerHit(10); }
         }
 
         //Player Attack Button Action
@@ -126,20 +126,25 @@ public class PlayerCharacter : MonoBehaviour
             if (active == dagger || active == sword){
                 active.GetComponent<MeleeScript>().Swing();
             }
-            else if (active == pistol && pistolAmmo > 0){
+            else if (active == pistol && (pistolAmmo > 0 || godmode)){
                 
-                if (active.GetComponent<Pistol>().Fire()) {
+                if (active.GetComponent<Pistol>().Fire() && !godmode) {
                     pistolAmmo--;
                     Messenger<int>.Broadcast(GameEvent.UPDATE_AMMO, (int)pistolAmmo);
                 }
             }
-            else if (active == rpg && rpgAmmo > 0) {
+            else if (active == rpg && (rpgAmmo > 0 || godmode)) {
                 if (active.GetComponent<RPGLauncher>().Fire()){
                     rpgAmmo--;
                     Messenger<int>.Broadcast(GameEvent.UPDATE_AMMO, (int)rpgAmmo);
                 }
             }
         }
+        if (Input.GetKeyDown(KeyCode.F9)){
+            godmode = !godmode;
+            //Messenger<bool>.Broadcast(GameEvent.GODMODE_PRESSED);
+        }
+        if (Input.GetKeyDown(KeyCode.F8)){ Respawn(); }
     }
     //Player picks up Dagger
     public void OnDaggerUnlock() { 
@@ -189,7 +194,11 @@ public class PlayerCharacter : MonoBehaviour
     }
     //Player recieves damage from a source
     public void OnPlayerHit(int damage){
-        health -= damage;
-        Messenger<float>.Broadcast(GameEvent.PLAYER_HIT, (float)health / maxHealth);
+        if (timeSinceLastHit >= invulnerablePeriod){
+            timeSinceLastHit = 0;
+            health -= damage;
+            Messenger<float>.Broadcast(GameEvent.PLAYER_HIT, (float)health / maxHealth);
+        }
     }
+
 }

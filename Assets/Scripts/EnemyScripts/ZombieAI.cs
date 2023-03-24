@@ -45,7 +45,8 @@ public class ZombieAI : MonoBehaviour
         active,
         attack,
         dead,
-        shamble
+        shamble,
+        bossAdd
     }
 
     private void Start()
@@ -91,34 +92,48 @@ public class ZombieAI : MonoBehaviour
     void Update()
     {
         distance = Vector3.Distance(Player.transform.position, this.transform.position);
-        rb.AddForce(Vector3.down * 9.81f);
-
-        if (state != EnemyStates.dead) {
-            if (distance <= distanceToAttack) {
-                ChangeState(EnemyStates.attack);
-                AttackState();
-            }
-            else if (distance <= distanceToActive) { 
+        if (state == EnemyStates.bossAdd){
+            ActiveState();
+            if (distance <= distanceToActive) { 
                 ChangeState(EnemyStates.active);
-                ActiveState();
             }
-            else if (distance > distanceToActive) { 
-                ChangeState(EnemyStates.shamble); 
-                ShambleState();
-            }
-           
         }
-        if (state != EnemyStates.dead && state != EnemyStates.attack)
+        else
         {
-            Ray ray = new Ray(transform.position, transform.forward);
-            RaycastHit hit;
+            
+            rb.AddForce(Vector3.down * 9.81f);
 
-            if (Physics.SphereCast(ray, sphereRadius, out hit))
+            if (state != EnemyStates.dead)
             {
-                if (hit.distance < obstacleRange)
+                if (distance <= distanceToAttack)
                 {
-                    float turnAngle = Random.Range(-40, 40);
-                    transform.Rotate(Vector3.up * turnAngle);
+                    ChangeState(EnemyStates.attack);
+                    AttackState();
+                }
+                else if (distance <= distanceToActive)
+                {
+                    ChangeState(EnemyStates.active);
+                    ActiveState();
+                }
+                else if (distance > distanceToActive)
+                {
+                    ChangeState(EnemyStates.shamble);
+                    ShambleState();
+                }
+
+            }
+            if (state != EnemyStates.dead && state != EnemyStates.attack)
+            {
+                Ray ray = new Ray(transform.position, transform.forward);
+                RaycastHit hit;
+
+                if (Physics.SphereCast(ray, sphereRadius, out hit))
+                {
+                    if (hit.distance < obstacleRange)
+                    {
+                        float turnAngle = Random.Range(-40, 40);
+                        transform.Rotate(Vector3.up * turnAngle);
+                    }
                 }
             }
         }

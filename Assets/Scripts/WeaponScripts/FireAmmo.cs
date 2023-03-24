@@ -19,9 +19,10 @@ public class FireAmmo : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         ZombieAI enemy = other.gameObject.GetComponent<ZombieAI>();
         BossController boss = other.gameObject.GetComponent<BossController>();
+        PlayerCharacter player = other.gameObject.GetComponent<PlayerCharacter>();
         if (enemy){ enemy.TakeDamage(10);}
         else if (boss) { boss.TakeDamage(10);}
+        else if (player) { player.OnPlayerHit(5); }
         Destroy(this.gameObject);
-        
     }
 }

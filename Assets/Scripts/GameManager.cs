@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
         Messenger.AddListener(GameEvent.RETURN_TO_MAIN_MENU, OnMoveToMainMenu);
         Messenger.AddListener(GameEvent.RESTART_CURRENT_MAP, OnRestartCurrentMap);
         Messenger.AddListener(GameEvent.NEXT_LEVEL, OnNextLevel);
+        Messenger<Vector3>.AddListener(GameEvent.CHANGE_SPAWN_POINT, OnChangeSpawnPoint);
     }
     public void OnDestroy()
     {
@@ -33,7 +34,9 @@ public class GameManager : MonoBehaviour
         Messenger.RemoveListener(GameEvent.RETURN_TO_MAIN_MENU, OnMoveToMainMenu);
         Messenger.RemoveListener(GameEvent.RESTART_CURRENT_MAP, OnRestartCurrentMap);
         Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnNextLevel);
+        Messenger<Vector3>.RemoveListener(GameEvent.CHANGE_SPAWN_POINT, OnChangeSpawnPoint);
     }
+    void OnChangeSpawnPoint(Vector3 pos){ pc.ChangeSpawnPoint(pos); }
     private void OnNextLevel(){
         pc.SaveInfo();
     }

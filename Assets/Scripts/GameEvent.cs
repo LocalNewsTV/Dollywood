@@ -17,7 +17,10 @@ public static class GameEvent{
     //Enemy Events
     public const string ENEMY_HIT = "ENEMY_HIT";
     public const string START_BOSS_FIGHT = "START_BOSS_FIGHT";
+    public const string END_BOSS_FIGHT = "END_BOSS_FIGHT";
     public const string ENEMY_DEAD = "ENEMY_DEAD";
+    public const string BOSS_SPAWN_ONE = "BOSS_SPAWN_ONE";
+    public const string BOSS_SPAWN_ALL = "BOSS_SPAWN_ALL";
 
     //Menus
     public const string POPUP_OPENED = "POPUP_OPENED";
@@ -47,7 +50,7 @@ public static class GameEvent{
     public const string SWORD_UNLOCK = "SWORD_UNLOCK";
     public const string PISTOL_UNLOCK = "PISTOL_UNLOCK";
     public const string RPG_UNLOCK = "RPG_UNLOCK";
-
+    public const string GODMODE_PRESSED = "GODMODE_PRESSED";
 
     //Pickups
     public const string PISTOL_AMMO_PICKUP = "PISTOL_AMMO_PICKUP";
@@ -59,6 +62,7 @@ public static class GameEvent{
     public const string PLAYER_HIT = "PLAYER_HIT";
     public const string PLAYER_TAKE_DAMAGE = "PLAYER_TAKE_DAMAGE";
     public const string PLAYER_HEAL = "PLAYER_HEAL";
+    public const string CHANGE_SPAWN_POINT = "CHANGE_SPAWN_POINT";
 
     //UI Events
     public const string PISTOL_EQUIPPED = "PISTOL_EQUIPPED";

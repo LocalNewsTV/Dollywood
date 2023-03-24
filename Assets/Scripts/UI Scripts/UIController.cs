@@ -80,16 +80,16 @@ public class UIController : MonoBehaviour
         Image img = screenIndicator.GetComponent<Image>();
         color.a = 0;
         img.color = color;
-        for(int i = 0; i < 75; i++) {
+        for(int i = 0; i < 50; i++) {
             color.a += 0.01f;
             img.color = color;
-            yield return new WaitForSeconds(0.002f);
+            yield return new WaitForSeconds(0.0015f);
         }
-        for(int i = 0; i < 75; i++)
+        for(int i = 0; i < 50; i++)
         {
             color.a -= 0.01f;
             img.color = color;
-            yield return new WaitForSeconds(0.002f);
+            yield return new WaitForSeconds(0.0015f);
         }
     }
     private void OnPopupOpened(){

@@ -30,5 +30,8 @@ public class FireWeapon : MonoBehaviour
             GameObject hitObject = hit.transform.gameObject;
             StartCoroutine(SphereIndicator(hit.point));
         }
+        else{
+
+        }
     }
 }

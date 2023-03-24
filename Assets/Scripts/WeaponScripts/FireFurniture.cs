@@ -22,12 +22,10 @@ public class FireFurniture : MonoBehaviour
         }
     }
     private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.name);
-       
-            if (other.CompareTag("Enemy"))
-            {
-                Debug.Log("Success");
-            }
+    {     
+        PlayerCharacter pc = other.GetComponent<PlayerCharacter>();
+        if (pc){
+            pc.OnPlayerHit(15);
+        }
     }
 }
