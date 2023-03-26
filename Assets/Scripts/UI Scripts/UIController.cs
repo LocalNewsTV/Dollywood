@@ -13,7 +13,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private OptionsPopup optionsPopup;
     [SerializeField] private TextMeshProUGUI ammoValueLabel;
     [SerializeField] private GameObject screenIndicator;
+    [SerializeField] private YouDiedPopup deathPopup;
+    [SerializeField] private TextMeshProUGUI tipScreen;
 
+    private string blank = "";
     private int popupsActive = 0;
     // Start is called before the first frame update
 
@@ -35,6 +38,7 @@ public class UIController : MonoBehaviour
         Messenger.AddListener(GameEvent.HEALTH_KIT_PICKUP, OnHealthkitPickup);
         Messenger<float>.AddListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
         Messenger.AddListener(GameEvent.NEXT_LEVEL, OnFadeOut);
+        Messenger.AddListener(GameEvent.PLAYER_DIED, OnPlayerDied);
     }
     private void OnDestroy(){
         Messenger.RemoveListener(GameEvent.POPUP_OPENED, OnPopupOpened);
@@ -52,8 +56,23 @@ public class UIController : MonoBehaviour
         Messenger<float>.RemoveListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
         Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnFadeOut);
     }
+
+    public void OnTipReceived(string tip){
+        StartCoroutine(DisplayTip(tip));
+    }
+    private IEnumerator DisplayTip(string tip)
+    {
+        tipScreen.text = tip;
+        yield return new WaitForSeconds(5);
+        tipScreen.text = blank;
+    }
     private void OnFadeOut(){
         StartCoroutine(FadeToBlack());
+    }
+    private void OnPlayerDied()
+    {
+        deathPopup.Open();
+        //deathPopup.PlayerDied();
     }
     private IEnumerator FadeToBlack(){
         Image img = screenIndicator.GetComponent<Image>();

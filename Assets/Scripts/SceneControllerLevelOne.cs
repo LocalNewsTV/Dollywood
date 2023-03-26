@@ -15,14 +15,14 @@ public class SceneControllerLevelOne : MonoBehaviour
         Messenger.AddListener(GameEvent.ENEMY_SPAWN_A, SpawnOne);
         Messenger.AddListener(GameEvent.ENEMY_SPAWN_B, SpawnTwo);
         Messenger.AddListener(GameEvent.ENEMY_SPAWN_C, SpawnThree);
-        Messenger.AddListener(GameEvent.ENEMY_SPAWN_C, SpawnFour);
+        Messenger.AddListener(GameEvent.ENEMY_SPAWN_D, SpawnFour);
     }
     private void OnDestroy()
     {
         Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_A, SpawnOne);
         Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_B, SpawnTwo);
         Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_C, SpawnThree);
-        Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_C, SpawnFour);
+        Messenger.RemoveListener(GameEvent.ENEMY_SPAWN_D, SpawnFour);
     }
 
     private void SpawnOne() { spawnSet(Spawn1); }

@@ -51,6 +51,7 @@ public class BossController : MonoBehaviour
             mr.enabled = !mr.enabled;
             yield return new WaitForSeconds(0.2f);
         }
+        Messenger.Broadcast(GameEvent.END_BOSS_FIGHT);
         Destroy(this.gameObject);
         
     }

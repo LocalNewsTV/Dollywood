@@ -19,6 +19,7 @@ public class FireWeapon : MonoBehaviour
         //tracer.transform.rotation = transform.rotation;
         tracer.transform.LookAt(hitPosition);
         yield return new WaitForSeconds(1);
+        Messenger.Broadcast(GameEvent.WEAPON_FIRED);
     }
     public void FireAmmo()
     {

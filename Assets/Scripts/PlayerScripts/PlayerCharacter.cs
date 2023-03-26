@@ -9,6 +9,7 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private GameObject rpg;
     [SerializeField] private GameObject dagger;
     [SerializeField] private GameObject sword;
+    [SerializeField] private GameObject flashlight;
     //Weapon Unlocks
     private bool haveSword;
     private bool havePistol;
@@ -20,21 +21,23 @@ public class PlayerCharacter : MonoBehaviour
     private int pistolAmmo;
     private int rpgAmmo;
 
+    private int healthKitValue = 20;
     private int maxHealth = 100;
-    private float invulnerablePeriod = 0.5f;
+    private float invulnerablePeriod = 0.3f;
     private float timeSinceLastHit = 0;
 
     private bool godmode = false;
 
     private Vector3 spawnPoint;
 
-    private GameObject active;//Currently Active Weapon ref.
+    private GameObject active; //Currently Active Weapon ref.
 
     private void Awake()
     {
         Messenger.AddListener(GameEvent.GAME_INACTIVE, OnGameInactive);
         Messenger.AddListener(GameEvent.GAME_ACTIVE, OnGameActive);
         Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
+        Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
     }
     private void OnDestroy()
     {
@@ -51,7 +54,6 @@ public class PlayerCharacter : MonoBehaviour
         haveDagger = PlayerPrefs.GetInt(GameTerms.DAGGER_UNLOCKED, 0) == 1;
 
         health = PlayerPrefs.GetInt(GameTerms.HEALTH, 100);
-        Messenger<float>.Broadcast(GameEvent.PLAYER_HIT, (float)health / maxHealth);
 
         pistolAmmo = PlayerPrefs.GetInt(GameTerms.PISTOL_AMMO, 20);
         rpgAmmo = PlayerPrefs.GetInt(GameTerms.RPG_AMMO, 10);
@@ -59,7 +61,7 @@ public class PlayerCharacter : MonoBehaviour
         active = null;
     }
 
-    void Respawn(){
+    public void Respawn(){
         Debug.Log("Respawning");
         CharacterController player = gameObject.GetComponent<CharacterController>();
         player.enabled = false;
@@ -67,6 +69,10 @@ public class PlayerCharacter : MonoBehaviour
         Debug.Log(spawnPoint);
         gameObject.transform.position = spawnPoint;
         player.enabled = true;
+        if(health <= 0){
+            health = maxHealth;
+            Messenger<float>.Broadcast(GameEvent.PLAYER_HEAL, (float)health / maxHealth);
+        }
     }
     public void ChangeSpawnPoint(Vector3 pos){ spawnPoint = pos; }
     public void OnNewGame(){
@@ -120,7 +126,7 @@ public class PlayerCharacter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1)) {
             if (!godmode){ OnPlayerHit(10); }
         }
-
+        if (Input.GetKeyDown(KeyCode.F)){flashlight.SetActive( !flashlight.activeSelf); }
         //Player Attack Button Action
         if (Input.GetMouseButton(0)){
             if (active == dagger || active == sword){
@@ -185,10 +191,10 @@ public class PlayerCharacter : MonoBehaviour
     }
     //Player Collects Health Kit
     public void OnHealthKitPickup() { 
-        if(health + 20 > maxHealth) {
+        if(health + healthKitValue > maxHealth) {
             health = maxHealth;
         } else {
-            health += 20;
+            health += healthKitValue;
         }
         Messenger<float>.Broadcast(GameEvent.PLAYER_HEAL, (float)health / maxHealth);
     }
@@ -198,6 +204,9 @@ public class PlayerCharacter : MonoBehaviour
             timeSinceLastHit = 0;
             health -= damage;
             Messenger<float>.Broadcast(GameEvent.PLAYER_HIT, (float)health / maxHealth);
+            if(health <= 0){
+                Messenger.Broadcast(GameEvent.PLAYER_DIED);
+            }
         }
     }
 

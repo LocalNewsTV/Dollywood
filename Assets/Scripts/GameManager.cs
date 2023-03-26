@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] PlayerCharacter pc;
+    [SerializeField] UIController ui;
     [SerializeField] string thisMap;
 
     public void Awake()
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
         Messenger.AddListener(GameEvent.RETURN_TO_MAIN_MENU, OnMoveToMainMenu);
         Messenger.AddListener(GameEvent.RESTART_CURRENT_MAP, OnRestartCurrentMap);
         Messenger.AddListener(GameEvent.NEXT_LEVEL, OnNextLevel);
+        Messenger.AddListener(GameEvent.WEAPON_FIRED, null);
         Messenger<Vector3>.AddListener(GameEvent.CHANGE_SPAWN_POINT, OnChangeSpawnPoint);
     }
     public void OnDestroy()
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
         Messenger.RemoveListener(GameEvent.RESTART_CURRENT_MAP, OnRestartCurrentMap);
         Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnNextLevel);
         Messenger<Vector3>.RemoveListener(GameEvent.CHANGE_SPAWN_POINT, OnChangeSpawnPoint);
+        Messenger.AddListener(GameEvent.WEAPON_FIRED, null);
     }
     void OnChangeSpawnPoint(Vector3 pos){ pc.ChangeSpawnPoint(pos); }
     private void OnNextLevel(){
@@ -45,10 +48,22 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(thisMap);
     }
     private void OnMoveToMainMenu(){ SceneManager.LoadScene(GameTerms.MAIN_MENU);}
-    private void OnDaggerUnlock(){ pc.OnDaggerUnlock(); }
-    private void OnPistolUnlock(){ pc.OnPistolUnlock(); }
-    private void OnSwordUnlock(){ pc.OnSwordUnlock(); }
-    private void OnRPGUnlock() { pc.OnRPGUnlock(); }
+    private void OnDaggerUnlock(){
+        ui.OnTipReceived(Tips.DAGGER);
+        pc.OnDaggerUnlock(); 
+    }
+    private void OnPistolUnlock(){
+        ui.OnTipReceived(Tips.PISTOL);
+        pc.OnPistolUnlock(); 
+    }
+    private void OnSwordUnlock(){
+        ui.OnTipReceived(Tips.SWORD);
+        pc.OnSwordUnlock();
+    }
+    private void OnRPGUnlock() {
+        ui.OnTipReceived(Tips.RPG);    
+        pc.OnRPGUnlock(); 
+    }
     private void OnRPGAmmoPickup() { pc.OnRPGAmmoPickup(); }
     private void OnHealthKitPickup() { pc.OnHealthKitPickup(); }
     private void OnPistolAmmoPickup() { pc.OnPistolAmmoPickup(); }

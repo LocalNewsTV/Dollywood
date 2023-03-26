@@ -20,11 +20,7 @@ public class ArenaBounds : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Triggered Platform");
-            CharacterController player = other.GetComponent<CharacterController>();
-            player.enabled = false;
-            other.transform.position = spawnPoint.position;
-            player.enabled = true;
+            other.GetComponent<PlayerCharacter>().Respawn();
         }
     }
 }

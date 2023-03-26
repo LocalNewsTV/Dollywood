@@ -13,7 +13,7 @@ public class ZombieAI : MonoBehaviour
     private float distanceToActive = 15f;
     private GameObject Player;
     private float health = 10;
-    
+    private float hearingRange = 25f;
     private float time = 0;
     private Rigidbody rb;
     private int rotateTime = 2;
@@ -28,6 +28,18 @@ public class ZombieAI : MonoBehaviour
         this.Player = Player;
         agent = GetComponent<NavMeshAgent>();
         Debug.Log(transform.position);
+    }
+    private void Awake(){
+        Messenger.AddListener(GameEvent.WEAPON_FIRED, OnWeaponFired);
+    }
+    private void OnDestroy(){
+        Messenger.RemoveListener(GameEvent.WEAPON_FIRED, OnWeaponFired);
+    }
+    private void OnWeaponFired()
+    {
+        if(Vector3.Distance(Player.transform.position, this.transform.position) <= hearingRange){
+            ChangeState(EnemyStates.bossAdd);
+        }
     }
     private void OnDrawGizmosSelected()
     {
@@ -141,7 +153,8 @@ public class ZombieAI : MonoBehaviour
 
     public IEnumerator CheckIfHitPlayer(){
         yield return new WaitForSeconds(0.5f);
-        if(Vector3.Distance(Player.transform.position, this.transform.position) <= attackRange) {
+        float distance = Vector3.Distance(Player.transform.position, this.transform.position);
+        if (distance <= attackRange && state != EnemyStates.dead) {
                 Messenger<int>.Broadcast(GameEvent.PLAYER_TAKE_DAMAGE, 5);
         }
         yield return new WaitForSeconds(0.5f);

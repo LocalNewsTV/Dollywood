@@ -63,6 +63,8 @@ public static class GameEvent{
     public const string PLAYER_TAKE_DAMAGE = "PLAYER_TAKE_DAMAGE";
     public const string PLAYER_HEAL = "PLAYER_HEAL";
     public const string CHANGE_SPAWN_POINT = "CHANGE_SPAWN_POINT";
+    public const string PLAYER_DIED = "PLAYER_DIED";
+    public const string PLAYER_RESPAWN = "PLAYER_RESPAWN";
 
     //UI Events
     public const string PISTOL_EQUIPPED = "PISTOL_EQUIPPED";
@@ -79,4 +81,8 @@ public static class GameEvent{
     public const string UNLOCK_DOOR_B = "UNLOCK_DOOR_B";
     public const string UNLOCK_DOOR_C = "UNLOCK_DOOR_C";
     public const string UNLOCK_DOOR_D = "UNLOCK_DOOR_D";
+
+
+    public const string WEAPON_FIRED = "WEAPON_FIRED";
+    public const string TIP_RECEIVED = "TIP_RECEIVED";
 }
