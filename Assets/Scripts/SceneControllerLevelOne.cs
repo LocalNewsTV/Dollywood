@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SceneControllerLevelOne : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SceneControllerLevelOne : MonoBehaviour
     [SerializeField] private Transform Spawn2;
     [SerializeField] private Transform Spawn3;
     [SerializeField] private Transform Spawn4;
+
     private void Awake()
     {
         Messenger.AddListener(GameEvent.ENEMY_SPAWN_A, SpawnOne);
@@ -40,6 +42,9 @@ public class SceneControllerLevelOne : MonoBehaviour
             enemy.GetComponent<ZombieAI>().SetPlayer(Player);
             enemy.GetComponent<ZombieAI>().ChangeState(ZombieAI.EnemyStates.shamble);
             enemy.transform.localScale = enemy.transform.localScale * 0.55f;
+            enemy.GetComponent<NavMeshAgent>().stoppingDistance = 0.0f;
+            enemy.GetComponent<ZombieAI>().AdjustScale(0.55f);
+            
         }
     }
 }

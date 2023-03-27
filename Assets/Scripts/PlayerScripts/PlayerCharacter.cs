@@ -10,6 +10,8 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private GameObject dagger;
     [SerializeField] private GameObject sword;
     [SerializeField] private GameObject flashlight;
+
+    [SerializeField] private CharacterController cc;
     //Weapon Unlocks
     private bool haveSword;
     private bool havePistol;
@@ -62,13 +64,11 @@ public class PlayerCharacter : MonoBehaviour
     }
 
     public void Respawn(){
-        Debug.Log("Respawning");
-        CharacterController player = gameObject.GetComponent<CharacterController>();
-        player.enabled = false;
+        cc.enabled = false;
         Debug.Log(gameObject.transform.position);
         Debug.Log(spawnPoint);
         gameObject.transform.position = spawnPoint;
-        player.enabled = true;
+        cc.enabled = true;
         if(health <= 0){
             health = maxHealth;
             Messenger<float>.Broadcast(GameEvent.PLAYER_HEAL, (float)health / maxHealth);
@@ -200,7 +200,7 @@ public class PlayerCharacter : MonoBehaviour
     }
     //Player recieves damage from a source
     public void OnPlayerHit(int damage){
-        if (timeSinceLastHit >= invulnerablePeriod){
+        if (timeSinceLastHit >= invulnerablePeriod && !godmode){
             timeSinceLastHit = 0;
             health -= damage;
             Messenger<float>.Broadcast(GameEvent.PLAYER_HIT, (float)health / maxHealth);

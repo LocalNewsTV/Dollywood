@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,9 +22,11 @@ public class GameManager : MonoBehaviour
         Messenger.AddListener(GameEvent.RETURN_TO_MAIN_MENU, OnMoveToMainMenu);
         Messenger.AddListener(GameEvent.RESTART_CURRENT_MAP, OnRestartCurrentMap);
         Messenger.AddListener(GameEvent.NEXT_LEVEL, OnNextLevel);
-        Messenger.AddListener(GameEvent.WEAPON_FIRED, null);
+        Messenger.AddListener(GameEvent.WEAPON_FIRED, Ignore);
         Messenger<Vector3>.AddListener(GameEvent.CHANGE_SPAWN_POINT, OnChangeSpawnPoint);
+        Messenger<string>.AddListener(GameEvent.TIP_RECEIVED, OnTipReceived);
     }
+    private void Ignore() { }
     public void OnDestroy()
     {
         Messenger.RemoveListener(GameEvent.DAGGER_UNLOCK, OnDaggerUnlock);
@@ -37,7 +40,12 @@ public class GameManager : MonoBehaviour
         Messenger.RemoveListener(GameEvent.RESTART_CURRENT_MAP, OnRestartCurrentMap);
         Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnNextLevel);
         Messenger<Vector3>.RemoveListener(GameEvent.CHANGE_SPAWN_POINT, OnChangeSpawnPoint);
-        Messenger.AddListener(GameEvent.WEAPON_FIRED, null);
+        Messenger.RemoveListener(GameEvent.WEAPON_FIRED, Ignore);
+        Messenger<string>.RemoveListener(GameEvent.TIP_RECEIVED, OnTipReceived);
+    }
+    private void OnTipReceived(string tip)
+    {
+        ui.OnTipReceived(tip);
     }
     void OnChangeSpawnPoint(Vector3 pos){ pc.ChangeSpawnPoint(pos); }
     private void OnNextLevel(){

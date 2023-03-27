@@ -16,7 +16,8 @@ public class FloorTriggers : MonoBehaviour
         UnlockElevator,
         UnlockStoreroom,
         AwakenBoss, 
-        UnlockDagger
+        UnlockDagger,
+        FlashlightTip
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -31,6 +32,7 @@ public class FloorTriggers : MonoBehaviour
             else if(trig == triggers.UnlockElevator){ Messenger.Broadcast(GameEvent.UNLOCK_EXIT); }
             else if(trig == triggers.AwakenBoss) { Messenger.Broadcast(GameEvent.START_BOSS_FIGHT); }
             else if(trig == triggers.UnlockDagger) { Messenger.Broadcast(GameEvent.DAGGER_UNLOCK); }
+            else if(trig == triggers.FlashlightTip) { Messenger<string>.Broadcast(GameEvent.TIP_RECEIVED, Tips.FLASHLIGHT); }
             if (SelfDestructAfterUse) { Destroy(this.gameObject); }
         }
         

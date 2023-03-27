@@ -34,8 +34,10 @@ public class OpenDoor : MonoBehaviour
     {
         if ((PlayerOnly && other.CompareTag("Player") || !PlayerOnly && other.tag != null) && !lockedDoor)
         {
-            Debug.Log("Called");
             returnToStart = true;
+        } else if (other.CompareTag("Player") && lockedDoor)
+        {
+            Messenger<string>.Broadcast(GameEvent.TIP_RECEIVED, Tips.LOCKED_DOOR);
         }
     }
     // Update is called once per frame

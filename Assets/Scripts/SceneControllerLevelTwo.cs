@@ -13,10 +13,6 @@ public class SceneControllerLevelTwo : MonoBehaviour
     [SerializeField] private GameObject storeroomDoor;
     [SerializeField] private GameObject elevatorDoor;
     private GameObject enemy;
-    private Vector3 spawnPoint = new Vector3(0, 0, 5);
-    private int maxEnemies = 15;
-    GameObject[] numEnemies;
-    GameObject[] spawnPoints;
 
         void Awake(){
             Messenger.AddListener(GameEvent.REVEAL_PHOTOS, ShowDolly);

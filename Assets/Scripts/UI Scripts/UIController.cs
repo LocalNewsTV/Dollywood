@@ -7,14 +7,18 @@ using TMPro;
 public class UIController : MonoBehaviour
 {
  
-
+     
     [SerializeField] private Image healthBar;
     [SerializeField] private Image crossHair;
     [SerializeField] private OptionsPopup optionsPopup;
     [SerializeField] private TextMeshProUGUI ammoValueLabel;
-    [SerializeField] private GameObject screenIndicator;
+    
+    [SerializeField] private Image[] screenIndicator;
+
     [SerializeField] private YouDiedPopup deathPopup;
-    [SerializeField] private TextMeshProUGUI tipScreen;
+    [SerializeField] private TextMeshProUGUI tipScreen1;
+    [SerializeField] private TextMeshProUGUI tipScreen2;
+    [SerializeField] private TextMeshProUGUI tipScreen3;
 
     private string blank = "";
     private int popupsActive = 0;
@@ -45,7 +49,7 @@ public class UIController : MonoBehaviour
         Messenger.RemoveListener(GameEvent.POPUP_CLOSED, OnPopupClosed);
         Messenger.RemoveListener(GameEvent.DISABLE_CROSSHAIR, OnPopupClosed);
         Messenger.RemoveListener(GameEvent.ENABLE_CROSSHAIR, OnPopupClosed);
-        Messenger<float>.RemoveListener(GameEvent.PLAYER_HIT, UpdateHealthIcon);
+        Messenger<float>.RemoveListener(GameEvent.PLAYER_HIT, OnPlayerDamage);
         Messenger<int>.RemoveListener(GameEvent.PISTOL_EQUIPPED, UpdateAmmo);
         Messenger<int>.RemoveListener(GameEvent.RPG_EQUIPPED, UpdateAmmo);
         Messenger.RemoveListener(GameEvent.MELEE_EQUIPPED, UpdateAmmoForMelee);
@@ -55,6 +59,7 @@ public class UIController : MonoBehaviour
         Messenger.RemoveListener(GameEvent.HEALTH_KIT_PICKUP, OnHealthkitPickup);
         Messenger<float>.RemoveListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
         Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnFadeOut);
+        Messenger.RemoveListener(GameEvent.PLAYER_DIED, OnPlayerDied);
     }
 
     public void OnTipReceived(string tip){
@@ -62,9 +67,14 @@ public class UIController : MonoBehaviour
     }
     private IEnumerator DisplayTip(string tip)
     {
-        tipScreen.text = tip;
+        TextMeshProUGUI tipTarget;
+        if(tipScreen1.text == "") { tipTarget = tipScreen1; }
+        else if (tipScreen2.text == "") { tipTarget = tipScreen2; }
+        else if (tipScreen3.text == "") { tipTarget = tipScreen3; }
+        else { tipTarget = tipScreen1; }
+        tipTarget.text = tip;
         yield return new WaitForSeconds(5);
-        tipScreen.text = blank;
+        tipTarget.text = blank;
     }
     private void OnFadeOut(){
         StartCoroutine(FadeToBlack());
@@ -75,13 +85,17 @@ public class UIController : MonoBehaviour
         //deathPopup.PlayerDied();
     }
     private IEnumerator FadeToBlack(){
-        Image img = screenIndicator.GetComponent<Image>();
         Color black = Color.black;
-        img.color = Color.black;
+        foreach (Image indic in screenIndicator){
+            indic.color = Color.black;
+        }
         for (int i = 0; i < 75; i++)
         {
             black.a += 0.01f;
-            img.color = black;
+            foreach (Image indic in screenIndicator)
+            {
+                indic.color = black;
+            }
             yield return new WaitForSeconds(0.08f);
         }
     }
@@ -96,18 +110,23 @@ public class UIController : MonoBehaviour
     }
     private IEnumerator IndicateEvent(Color color)
     {
-        Image img = screenIndicator.GetComponent<Image>();
         color.a = 0;
-        img.color = color;
-        for(int i = 0; i < 50; i++) {
+        foreach(Image indic in screenIndicator){
+            indic.color = color;
+        }
+        for (int i = 0; i < 50; i++) {
             color.a += 0.01f;
-            img.color = color;
+            foreach (Image indic in screenIndicator) { 
+            indic.color = color;
+            }
             yield return new WaitForSeconds(0.0015f);
         }
         for(int i = 0; i < 50; i++)
         {
             color.a -= 0.01f;
-            img.color = color;
+            foreach (Image indic in screenIndicator) { 
+                indic.color = color;
+            }
             yield return new WaitForSeconds(0.0015f);
         }
     }
@@ -129,7 +148,6 @@ public class UIController : MonoBehaviour
         SetGameActive(true);
     }
     private void UpdateAmmo(int ammo){
-        Debug.Log(ammoValueLabel.text);
         ammoValueLabel.text = ammo.ToString();
     }
     private void UpdateAmmoForMelee(){

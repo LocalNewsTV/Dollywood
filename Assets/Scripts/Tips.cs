@@ -11,4 +11,11 @@ public static class Tips
     public const string FLASHLIGHT = "Press 'F' to toggle flashlight";
 
 
+    public const string LOCKED_DOOR = "This door is locked.";
+    public const string STOREROOM_UNLOCK = "You hear a door unlock in the distance.";
+    public const string AREA_ONE_TIP = "Head to the office across town.";
+    public const string AREA_TWO_TIP = "Find the Elevator to take you further.";
+    public const string AREA_THREE_TIP = "Ascend the structure";
+    public const string SURVIVE = "Survive...";
+
 }

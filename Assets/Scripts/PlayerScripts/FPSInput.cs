@@ -16,7 +16,7 @@ public class FPSInput : MonoBehaviour
     private float defaultSpeed = 9.0f;
     float speed;
     private float numJumps;
-    private float jumpMax = 2;
+    [SerializeField] private float jumpMax = 2;
     // Start is called before the first frame update
     void Start()
     {

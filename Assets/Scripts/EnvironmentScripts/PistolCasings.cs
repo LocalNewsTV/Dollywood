@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PistolCasings : MonoBehaviour
 {
-    void Start()
-    {
+    void Start(){
         Destroy(this.gameObject, 7);
-        //StartCoroutine(DieInFiveSeconds());
     }
 }

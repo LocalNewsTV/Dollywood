@@ -23,31 +23,27 @@ public class SettingsPopup : BasePopup
     }
 
     public void UseSavedGameSettings(){
-        musicSlider.value = PlayerPrefs.GetInt("music", 100);
+        musicSlider.value = PlayerPrefs.GetInt("music", 50);
         UpdateMusic(musicSlider.value);
 
-        soundSlider.value = PlayerPrefs.GetInt("sound", 100);
+        soundSlider.value = PlayerPrefs.GetInt("sound", 50);
         UpdateSound(soundSlider.value);
 
-        mouseSensitivitySlider.value = PlayerPrefs.GetInt("sensitivity", 100);
+        mouseSensitivitySlider.value = PlayerPrefs.GetInt("sensitivity", 50);
         UpdateSensitivity(mouseSensitivitySlider.value);
     }
-    override public void Open()
-    {
+    override public void Open(){
         base.Open();
     }
-    override public void Close()
-    {
+    override public void Close(){
         optionsPopup.Open();
         base.Close();
     }
-    public void OnSettingsCancel()
-    {
+    public void OnSettingsCancel(){
         UseSavedGameSettings();
         Close();
     }
-    public void OnSettingsOK()
-    {
+    public void OnSettingsOK(){
         PlayerPrefs.SetInt("music", (int)musicSlider.value);
         PlayerPrefs.SetInt("sound", (int)soundSlider.value);
         PlayerPrefs.SetInt("sensitivity", (int)mouseSensitivitySlider.value);
@@ -58,30 +54,24 @@ public class SettingsPopup : BasePopup
         Close();
     }
 
-    public void UpdateMusic(float music)
-    {
+    public void UpdateMusic(float music){
         musicLabel.text = music.ToString();
     }
-    public void UpdateSound(float sound)
-    {
+    public void UpdateSound(float sound){
         soundLabel.text = sound.ToString();
     }
-    public void UpdateSensitivity(float sensitivity)
-    {
+    public void UpdateSensitivity(float sensitivity){
         mouseSensitivityLabel.text = sensitivity.ToString();
     }
 
   
-    public void OnMusicValueChanges(float difficulty)
-    {
+    public void OnMusicValueChanges(float difficulty){
         UpdateMusic(difficulty);
     }
-    public void OnSoundValueChanges(float difficulty)
-    {
+    public void OnSoundValueChanges(float difficulty){
         UpdateSound(difficulty);
     }
-    public void OnSensitivityValueChanges(float difficulty)
-    {
+    public void OnSensitivityValueChanges(float difficulty){
         UpdateSensitivity(difficulty);
     }
 }

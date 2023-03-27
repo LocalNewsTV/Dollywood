@@ -7,12 +7,8 @@ public class SoundController : MonoBehaviour
     [SerializeField] AudioSource bgm;
     public AudioClip[] songs;
     public int bgmIndex;
-
-    private int areaOne = 0;
-    private int areaTwo = 1;
-    private int areaThree = 2;
-    private int bossMusic = 3;
-    private int bossDefeat = 4;
+    private const int bossMusic = 3;
+    private const int bossDefeat = 4;
     private void Awake()
     {
         Messenger<int>.AddListener(GameEvent.MUSIC_CHANGED, OnMusicChanged);
