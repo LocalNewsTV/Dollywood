@@ -34,22 +34,19 @@ public class PlayerCharacter : MonoBehaviour
 
     private GameObject active; //Currently Active Weapon ref.
 
-    private void Awake()
-    {
+    private void Awake() {
         Messenger.AddListener(GameEvent.GAME_INACTIVE, OnGameInactive);
         Messenger.AddListener(GameEvent.GAME_ACTIVE, OnGameActive);
         Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
         Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
     }
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         Messenger.RemoveListener(GameEvent.GAME_INACTIVE, OnGameInactive);
         Messenger.RemoveListener(GameEvent.GAME_ACTIVE, OnGameActive);
     }
 
 
-    void Start()
-    {
+    void Start() {
         haveSword = PlayerPrefs.GetInt(GameTerms.SWORD_UNLOCKED, 0) == 1;
         havePistol = PlayerPrefs.GetInt(GameTerms.PISTOL_UNLOCKED, 0) == 1;
         haveRpg = PlayerPrefs.GetInt(GameTerms.RPG_UNLOCKED, 0) == 1;
@@ -61,8 +58,12 @@ public class PlayerCharacter : MonoBehaviour
         rpgAmmo = PlayerPrefs.GetInt(GameTerms.RPG_AMMO, 10);
 
         active = null;
+        AdjustScale(gameObject.transform.localScale.x);
     }
-
+    private void AdjustScale(float scale) {
+        sword.GetComponent<MeleeScript>().AdjustScale(scale);
+        dagger.GetComponent<MeleeScript>().AdjustScale(scale);
+    }
     public void Respawn(){
         cc.enabled = false;
         Debug.Log(gameObject.transform.position);
@@ -129,10 +130,7 @@ public class PlayerCharacter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F)){flashlight.SetActive( !flashlight.activeSelf); }
         //Player Attack Button Action
         if (Input.GetMouseButton(0)){
-            if (active == dagger || active == sword){
-                active.GetComponent<MeleeScript>().Swing();
-            }
-            else if (active == pistol && (pistolAmmo > 0 || godmode)){
+            if (active == pistol && (pistolAmmo > 0 || godmode)){
                 
                 if (active.GetComponent<Pistol>().Fire() && !godmode) {
                     pistolAmmo--;

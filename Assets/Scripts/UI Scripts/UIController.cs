@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class UIController : MonoBehaviour
 {
- 
-     
+
+    [SerializeField] private GameObject hud;
     [SerializeField] private Image healthBar;
     [SerializeField] private Image crossHair;
     [SerializeField] private OptionsPopup optionsPopup;
     [SerializeField] private TextMeshProUGUI ammoValueLabel;
-    
-    [SerializeField] private Image[] screenIndicator;
 
+    [SerializeField] private GameObject credits;
     [SerializeField] private YouDiedPopup deathPopup;
     [SerializeField] private TextMeshProUGUI tipScreen1;
     [SerializeField] private TextMeshProUGUI tipScreen2;
     [SerializeField] private TextMeshProUGUI tipScreen3;
 
+    [SerializeField] private Image[] screenIndicator;
     private string blank = "";
     private int popupsActive = 0;
     // Start is called before the first frame update
@@ -43,6 +44,7 @@ public class UIController : MonoBehaviour
         Messenger<float>.AddListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
         Messenger.AddListener(GameEvent.NEXT_LEVEL, OnFadeOut);
         Messenger.AddListener(GameEvent.PLAYER_DIED, OnPlayerDied);
+        Messenger.AddListener(GameEvent.END_BOSS_FIGHT, OnEndBossFight);
     }
     private void OnDestroy(){
         Messenger.RemoveListener(GameEvent.POPUP_OPENED, OnPopupOpened);
@@ -60,8 +62,20 @@ public class UIController : MonoBehaviour
         Messenger<float>.RemoveListener(GameEvent.PLAYER_HEAL, OnPlayerHeal);
         Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnFadeOut);
         Messenger.RemoveListener(GameEvent.PLAYER_DIED, OnPlayerDied);
+        Messenger.RemoveListener(GameEvent.END_BOSS_FIGHT, OnEndBossFight);
     }
-
+    private void OnEndBossFight()
+    {
+        hud.SetActive(false);
+        credits.SetActive(true);
+        credits.GetComponent<Animation>().Play();
+        StartCoroutine(EndGame());
+    }
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(60);
+        Messenger.Broadcast(GameEvent.RETURN_TO_MAIN_MENU);
+    }
     public void OnTipReceived(string tip){
         StartCoroutine(DisplayTip(tip));
     }

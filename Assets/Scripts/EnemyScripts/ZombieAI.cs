@@ -1,17 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Animations;
-using static UnityEngine.GraphicsBuffer;
 
 public class ZombieAI : MonoBehaviour
 {
     private EnemyStates state = EnemyStates.idle; //Default State
     Animator anim;
     private NavMeshAgent agent;
-    private GameObject Player;
+    public GameObject Player;
     private Rigidbody rb;
 
     //Bool for preventing repeated attacks in small window
@@ -26,7 +22,7 @@ public class ZombieAI : MonoBehaviour
     private float sphereRadius = 1.5f;
 
     //Health Values
-    private float health = 20;
+    private float health;
 
     //Calculated distance from Zombie to Player
     private float distance;
@@ -37,6 +33,16 @@ public class ZombieAI : MonoBehaviour
     private float walkSpeed = 1.5f;
 
 
+    /// <summary>
+    /// Rolls for a Crit chance at 10% 
+    /// </summary>
+    /// <returns>
+    /// Successful Crit
+    /// </returns>
+    public bool CalculateCritical()
+    {
+        return Random.Range(0, 10) == 5;
+    }
 /// <summary>
 /// States for Zombies
 /// </summary>
@@ -55,6 +61,7 @@ public class ZombieAI : MonoBehaviour
         agent.enabled = true; //If left enabled beforehand the zombies will Fly off the map
         anim = GetComponent<Animator>();
         SetSpeed(walkSpeed);
+        health = Random.Range(1, 25);
     }
 
     private void Awake() { Messenger.AddListener(GameEvent.WEAPON_FIRED, OnWeaponFired); }
@@ -217,6 +224,10 @@ public class ZombieAI : MonoBehaviour
     /// </summary>
     /// <param name="damage">Amount of HP to deduct</param>
     public void TakeDamage(int damage){
+        if (CalculateCritical())
+        {
+            damage *= 2;
+        }
         health -= damage;
         if(health <= 0){
             ChangeState(EnemyStates.dead);
