@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
@@ -10,8 +11,9 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private GameObject dagger;
     [SerializeField] private GameObject sword;
     [SerializeField] private GameObject flashlight;
-
+    [SerializeField] private AudioClip[] sounds;
     [SerializeField] private CharacterController cc;
+    private AudioSource sound;
     //Weapon Unlocks
     private bool haveSword;
     private bool havePistol;
@@ -23,9 +25,9 @@ public class PlayerCharacter : MonoBehaviour
     private int pistolAmmo;
     private int rpgAmmo;
 
-    private int healthKitValue = 20;
-    private int maxHealth = 100;
-    private float invulnerablePeriod = 0.3f;
+    private const int healthKitValue = 20;
+    private const int maxHealth = 100;
+    private const float invulnerablePeriod = 0.3f;
     private float timeSinceLastHit = 0;
 
     private bool godmode = false;
@@ -39,14 +41,19 @@ public class PlayerCharacter : MonoBehaviour
         Messenger.AddListener(GameEvent.GAME_ACTIVE, OnGameActive);
         Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
         Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
+        Messenger.AddListener(GameEvent.SOUND_CHANGED, AdjustVolume);
     }
     private void OnDestroy() {
         Messenger.RemoveListener(GameEvent.GAME_INACTIVE, OnGameInactive);
         Messenger.RemoveListener(GameEvent.GAME_ACTIVE, OnGameActive);
+        Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
+        Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
+        Messenger.RemoveListener(GameEvent.SOUND_CHANGED, AdjustVolume);
     }
-
+    private void AdjustVolume() { sound.volume = PlayerPrefs.GetInt("sound") / 100.0f; }
 
     void Start() {
+        sound = GetComponent<AudioSource>();
         haveSword = PlayerPrefs.GetInt(GameTerms.SWORD_UNLOCKED, 0) == 1;
         havePistol = PlayerPrefs.GetInt(GameTerms.PISTOL_UNLOCKED, 0) == 1;
         haveRpg = PlayerPrefs.GetInt(GameTerms.RPG_UNLOCKED, 0) == 1;
@@ -61,6 +68,7 @@ public class PlayerCharacter : MonoBehaviour
         AdjustScale(gameObject.transform.localScale.x);
     }
     private void AdjustScale(float scale) {
+        Debug.Log(scale);
         sword.GetComponent<MeleeScript>().AdjustScale(scale);
         dagger.GetComponent<MeleeScript>().AdjustScale(scale);
     }
@@ -124,14 +132,11 @@ public class PlayerCharacter : MonoBehaviour
         }
 
         //Test Button for Taking Damage
-        if (Input.GetKeyDown(KeyCode.F1)) {
-            if (!godmode){ OnPlayerHit(10); }
-        }
+        if (Input.GetKeyDown(KeyCode.F1)) {  OnPlayerHit(10); }
         if (Input.GetKeyDown(KeyCode.F)){flashlight.SetActive( !flashlight.activeSelf); }
         //Player Attack Button Action
         if (Input.GetMouseButton(0)){
             if (active == pistol && (pistolAmmo > 0 || godmode)){
-                
                 if (active.GetComponent<Pistol>().Fire() && !godmode) {
                     pistolAmmo--;
                     Messenger<int>.Broadcast(GameEvent.UPDATE_AMMO, (int)pistolAmmo);
@@ -144,11 +149,7 @@ public class PlayerCharacter : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.F9)){
-            godmode = !godmode;
-            //Messenger<bool>.Broadcast(GameEvent.GODMODE_PRESSED);
-        }
-        if (Input.GetKeyDown(KeyCode.F8)){ Respawn(); }
+        if (Input.GetKeyDown(KeyCode.F9)){ godmode = !godmode; }
     }
     //Player picks up Dagger
     public void OnDaggerUnlock() { 

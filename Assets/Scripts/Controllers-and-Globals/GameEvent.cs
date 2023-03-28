@@ -82,7 +82,7 @@ public static class GameEvent{
     public const string UNLOCK_DOOR_C = "UNLOCK_DOOR_C";
     public const string UNLOCK_DOOR_D = "UNLOCK_DOOR_D";
 
-
+    public const string EXPLOSION = "EXPLOSION";
     public const string WEAPON_FIRED = "WEAPON_FIRED";
     public const string TIP_RECEIVED = "TIP_RECEIVED";
 }

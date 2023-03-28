@@ -48,8 +48,8 @@ public class SettingsPopup : BasePopup
         PlayerPrefs.SetInt("sound", (int)soundSlider.value);
         PlayerPrefs.SetInt("sensitivity", (int)mouseSensitivitySlider.value);
 
-        Messenger<int>.Broadcast(GameEvent.MUSIC_CHANGED, (int)musicSlider.value);
-        //Messenger<int>.Broadcast(GameEvent.SOUND_CHANGED, (int)soundSlider.value);
+        Messenger.Broadcast(GameEvent.MUSIC_CHANGED);
+        Messenger.Broadcast(GameEvent.SOUND_CHANGED);
         Messenger<int>.Broadcast(GameEvent.SENSITIVITY_CHANGED, (int)mouseSensitivitySlider.value);
         Close();
     }

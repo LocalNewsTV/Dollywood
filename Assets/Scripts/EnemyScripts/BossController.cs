@@ -40,7 +40,7 @@ public class BossController : MonoBehaviour
         Messenger.RemoveListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
     }
     void Start(){
-        health = 10;
+        health = 4000;
     }
 
     private IEnumerator Die()

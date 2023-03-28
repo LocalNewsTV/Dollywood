@@ -32,7 +32,16 @@ public class ZombieAI : MonoBehaviour
     private float runSpeed = 12f;
     private float walkSpeed = 1.5f;
 
-
+    //Sound Keys
+    private AudioSource sound;
+    [SerializeField] private AudioClip[] sounds;
+    private const int sAttackingOne = 0;
+    private const int sAttackingTwo = 1;
+    private const int sAngryOne = 2;
+    private const int sAngryTwo = 3;
+    private const int sDamagedOne = 4;
+    private const int sDamagedTwo = 5;
+    private const int sScreaming = 6;
     /// <summary>
     /// Rolls for a Crit chance at 10% 
     /// </summary>
@@ -62,12 +71,18 @@ public class ZombieAI : MonoBehaviour
         anim = GetComponent<Animator>();
         SetSpeed(walkSpeed);
         health = Random.Range(1, 25);
+        sound = GetComponent<AudioSource>();
+        AdjustVolume();
     }
-
-    private void Awake() { Messenger.AddListener(GameEvent.WEAPON_FIRED, OnWeaponFired); }
+    private void AdjustVolume(){ sound.volume = PlayerPrefs.GetInt("sound") / 100.0f; }
+    private void Awake() { 
+        Messenger.AddListener(GameEvent.WEAPON_FIRED, OnWeaponFired);
+        Messenger.AddListener(GameEvent.SOUND_CHANGED, AdjustVolume);
+    }
     private void OnDestroy(){
         StopAllCoroutines();
         Messenger.RemoveListener(GameEvent.WEAPON_FIRED, OnWeaponFired);
+        Messenger.RemoveListener(GameEvent.SOUND_CHANGED, AdjustVolume);
     }
     /// <summary>
     /// Takes in Reference to Game Object, Giving the Zombie a Target to base itself off of
@@ -97,6 +112,8 @@ public class ZombieAI : MonoBehaviour
         rb.velocity= Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.Sleep();
+        sound.Stop();
+        sound.PlayOneShot(sounds[sScreaming]);
         anim.SetTrigger("Zombie_Scream_Trig");
         yield return new WaitForSeconds(2.8f);
         agent.isStopped = false;
@@ -117,9 +134,13 @@ public class ZombieAI : MonoBehaviour
             gameObject.transform.rotation = Quaternion.LookRotation(Player.transform.position - gameObject.transform.position);
             if (AorB()){
                 anim.SetTrigger("AttackPlayer_B_trig");
+                sound.Stop();
+                sound.PlayOneShot(sounds[sAttackingOne]);
                 StartCoroutine(CheckIfHitPlayer(4.167f / 2f)); //Animation time cut in half
             } else {
                 anim.SetTrigger("AttackPlayer_A_trig");
+                sound.Stop();
+                sound.PlayOneShot(sounds[sAttackingTwo]);
                 StartCoroutine(CheckIfHitPlayer(1f));
             }
             
@@ -252,9 +273,13 @@ public class ZombieAI : MonoBehaviour
         ChangeState(EnemyStates.reactToHit);
         if (AorB()){
             anim.SetTrigger("React_To_Hit_A_trig");
+            sound.Stop();
+            sound.PlayOneShot(sounds[sDamagedOne]);
             yield return new WaitForSeconds(2f / 2f);
         } else {
             anim.SetTrigger("React_To_Hit_B_trig");
+            sound.Stop();
+            sound.PlayOneShot(sounds[sDamagedTwo]);
             yield return new WaitForSeconds(2.167f / 2f);
         }
         ChangeState(temp);
@@ -274,11 +299,16 @@ public class ZombieAI : MonoBehaviour
 
         if(AorB()) {
             anim.SetBool("Dead_A_b", true);
+            sound.Stop();
+            sound.PlayOneShot(sounds[sDamagedOne]);
             yield return new WaitForSeconds(3); //Based on Time of animation
         } else {
             anim.SetBool("Dead_B_b", true);
+            sound.Stop();
+            sound.PlayOneShot(sounds[sDamagedTwo]);
             yield return new WaitForSeconds(1); //Based on Time of Animation
         }
+        sound.enabled = false;
         Destroy(this.gameObject);   
     }
 
