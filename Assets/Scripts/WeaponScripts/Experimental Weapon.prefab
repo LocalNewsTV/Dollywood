@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1716483478754816181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1716483478754816183}
+  - component: {fileID: 1716483478754816180}
+  m_Layer: 0
+  m_Name: Experimental Weapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1716483478754816183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716483478754816181}
+  m_LocalRotation: {x: 0, y: 0.35224998, z: 0, w: 0.935906}
+  m_LocalPosition: {x: -91.65, y: 139.73, z: -355.81506}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 41.25, z: 0}
+--- !u!114 &1716483478754816180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716483478754816181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb2dfd46626f49b48937318ddd577b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Bullets: {fileID: 3146115523641743037, guid: 71e99e03fffa81d47a17abed04b08ea6, type: 3}
+  Player: {fileID: 4862386622288628385, guid: 5661da546d090fa43a4aff2f96a5f5fa, type: 3}
+  first: {fileID: 2100000, guid: f760511c5bab13f48bc7635341ca8e9b, type: 2}
+  second: {fileID: 2100000, guid: ca187a1b3ef24e44a8bde5273c3fba66, type: 2}
+  numBullets: 100
+  spread: 0

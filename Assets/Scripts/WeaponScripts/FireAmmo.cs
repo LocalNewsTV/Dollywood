@@ -15,9 +15,11 @@ public class FireAmmo : MonoBehaviour
         if (Vector3.Distance(transform.position, init) > bulletRange){ Destroy(this.gameObject); }
     }
 
-    private void OnTriggerEnter(Collider other){
+    private void BulletHit(Collider other)
+    {
         Messenger.Broadcast(GameEvent.WEAPON_FIRED);
-        if (other.CompareTag("Enemy") || other.CompareTag("Player")){
+        if (other.CompareTag("Enemy") || other.CompareTag("Player"))
+        {
             ZombieAI enemy = other.gameObject.GetComponent<ZombieAI>();
             BossController boss = other.gameObject.GetComponent<BossController>();
             PlayerCharacter player = other.gameObject.GetComponent<PlayerCharacter>();
@@ -25,7 +27,10 @@ public class FireAmmo : MonoBehaviour
             else if (boss) { boss.TakeDamage(damage); }
             else if (player) { player.OnPlayerHit(damage); }
         }
-        if (explodes){ Messenger.Broadcast(GameEvent.EXPLOSION); }
+        if (explodes) { Messenger.Broadcast(GameEvent.EXPLOSION); }
         Destroy(this.gameObject);
-}
+    }
+    private void OnTriggerStay(Collider other) => BulletHit(other);
+    private void OnTriggerExit(Collider other) => BulletHit(other);
+    private void OnTriggerEnter(Collider other) => BulletHit(other);
 }

@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 3100369796855857704}
   - component: {fileID: 5783563440073397735}
   - component: {fileID: 452870128482941988}
+  - component: {fileID: 6561965798825191206}
   m_Layer: 0
   m_Name: HealthKit
   m_TagString: Untagged
@@ -517,6 +518,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 6
   rotationSpeed: 45
+--- !u!114 &6561965798825191206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3375000811567730530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68cda5b1ee8bd4340b3204cb82e31e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tip: +20 HP
 --- !u!1 &4527143171515146551
 GameObject:
   m_ObjectHideFlags: 0

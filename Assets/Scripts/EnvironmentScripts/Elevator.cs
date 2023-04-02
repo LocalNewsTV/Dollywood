@@ -12,12 +12,8 @@ public class Elevator : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(nextScene);
     }
-    private void OnTriggerEnter(Collider other)
-    {
-
-        if (other.CompareTag("Player"))
-        {
-
+    private void OnTriggerEnter(Collider other){
+        if (other.CompareTag("Player")){
             Messenger.Broadcast(GameEvent.NEXT_LEVEL);
             StartCoroutine(next());
         }

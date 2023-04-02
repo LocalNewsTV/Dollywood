@@ -21,6 +21,7 @@ public static class GameEvent{
     public const string ENEMY_DEAD = "ENEMY_DEAD";
     public const string BOSS_SPAWN_ONE = "BOSS_SPAWN_ONE";
     public const string BOSS_SPAWN_ALL = "BOSS_SPAWN_ALL";
+    public const string EXPERIMENTAL_WEAPONS = "EXPERIMENTAL_WEAPONS";
 
     //Menus
     public const string POPUP_OPENED = "POPUP_OPENED";

@@ -44,14 +44,9 @@ public class MouseLook : MonoBehaviour
         sensitivityHoriz = (sensitivity / 100.0f) * horizSenseMax;
         sensitivityVert = (sensitivity / 100.0f) * vertSenseMax;
     }
-    private void OnGameActive()
-    {
-        this.enabled = true;
-    }
-    private void OnGameInactive()
-    {
-        this.enabled = false;
-    }
+    private void OnGameActive() => this.enabled = true;
+    
+    private void OnGameInactive() => this.enabled = false;
 
 
     // Update is called once per frame

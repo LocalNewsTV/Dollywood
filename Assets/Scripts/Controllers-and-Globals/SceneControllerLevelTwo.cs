@@ -62,7 +62,7 @@ public class SceneControllerLevelTwo : MonoBehaviour
             enemy.transform.position = spawnPoint.transform.position;
             enemy.transform.Rotate(0, Random.Range(0, 360), 0);
             enemy.GetComponent<ZombieAI>().SetPlayer(Player);
-            enemy.GetComponent<ZombieAI>().ChangeState(ZombieAI.EnemyStates.shamble);
+            enemy.GetComponent<ZombieAI>().ChangeState(ZombieAI.EnemyStates.Shamble);
         }
     }
 

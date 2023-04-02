@@ -42,6 +42,8 @@ public class PlayerCharacter : MonoBehaviour
         Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
         Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
         Messenger.AddListener(GameEvent.SOUND_CHANGED, AdjustVolume);
+        Messenger.AddListener(GameEvent.END_BOSS_FIGHT, OnBossDefeated);
+        Messenger.AddListener(GameEvent.NEXT_LEVEL, OnNextLevelLoad);
     }
     private void OnDestroy() {
         Messenger.RemoveListener(GameEvent.GAME_INACTIVE, OnGameInactive);
@@ -49,7 +51,15 @@ public class PlayerCharacter : MonoBehaviour
         Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
         Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
         Messenger.RemoveListener(GameEvent.SOUND_CHANGED, AdjustVolume);
+        Messenger.RemoveListener(GameEvent.END_BOSS_FIGHT, OnBossDefeated);
+        Messenger.AddListener(GameEvent.NEXT_LEVEL, OnNextLevelLoad);
     }
+    private void OnNextLevelLoad(){
+        PlayerPrefs.SetInt(GameTerms.HEALTH, health);
+        PlayerPrefs.SetInt(GameTerms.PISTOL_AMMO, pistolAmmo);
+        PlayerPrefs.SetInt(GameTerms.RPG_AMMO, rpgAmmo);
+    }
+    void OnBossDefeated() => godmode = true;
     private void AdjustVolume() { sound.volume = PlayerPrefs.GetInt("sound") / 100.0f; }
 
     void Start() {
@@ -74,8 +84,6 @@ public class PlayerCharacter : MonoBehaviour
     }
     public void Respawn(){
         cc.enabled = false;
-        Debug.Log(gameObject.transform.position);
-        Debug.Log(spawnPoint);
         gameObject.transform.position = spawnPoint;
         cc.enabled = true;
         if(health <= 0){

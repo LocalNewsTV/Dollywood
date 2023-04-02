@@ -40,7 +40,7 @@ public class SceneControllerLevelOne : MonoBehaviour
             enemy.transform.position = spawnPoint.transform.position;
             enemy.transform.Rotate(0, Random.Range(0, 360), 0);
             enemy.GetComponent<ZombieAI>().SetPlayer(Player);
-            enemy.GetComponent<ZombieAI>().ChangeState(ZombieAI.EnemyStates.shamble);
+            enemy.GetComponent<ZombieAI>().ChangeState(ZombieAI.EnemyStates.Shamble);
             enemy.transform.localScale = enemy.transform.localScale * 0.55f;
             enemy.GetComponent<NavMeshAgent>().stoppingDistance = 0.0f;
             enemy.GetComponent<ZombieAI>().AdjustScale(0.55f);

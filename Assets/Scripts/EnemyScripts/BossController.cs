@@ -26,30 +26,33 @@ public class BossController : MonoBehaviour
 
     private EnemyStates state = EnemyStates.passive;
     private int health;
-    private float timeBetweenActions = 5f;
+    private const int maxHealth = 4000;
+    private const float timeBetweenActions = 4f;
     private float timeToAction = 0;
-    private float speedMin = 10;
-    private float speedMax = 31;
+    private const float speedMin = 10;
+    private const float speedMax = 31;
     // Start is called before the first frame update
 
     void Awake(){
         Messenger.AddListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
     }
-    private void OnDestroy()
-    {
+    private void OnDestroy(){
         Messenger.RemoveListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
     }
     void Start(){
-        health = 4000;
+        health = maxHealth;
     }
 
     private IEnumerator Die()
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
-        //sound.AlwaysLoveYou();
         for(int i = 0; i < 11; i++){
             mr.enabled = !mr.enabled;
             yield return new WaitForSeconds(0.2f);
+        }
+        for(int i = 0; i < 20; i++){
+            mr.enabled = !mr.enabled;
+            yield return new WaitForSeconds(0.05f);
         }
         Messenger.Broadcast(GameEvent.END_BOSS_FIGHT);
         Destroy(this.gameObject);
@@ -66,12 +69,17 @@ public class BossController : MonoBehaviour
     }
     // Update is called once per frame
     void Update(){
+        float healthPercent = (float)health / maxHealth;
         if(state != EnemyStates.passive) { 
             timeToAction += Time.deltaTime;
-            if (timeToAction >= timeBetweenActions){
+            if (timeToAction >= (timeBetweenActions * healthPercent) + 0.5f){
                 timeToAction = 0;
                 BossAction();
             }
+        }
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            Messenger.Broadcast(GameEvent.BOSS_SPAWN_ALL);
         }
     }
 
@@ -81,10 +89,10 @@ public class BossController : MonoBehaviour
     }
 
     void BossAction(){
-        if (Random.Range(0, 20) == 3) { Messenger.Broadcast(GameEvent.BOSS_SPAWN_ALL); }
+        if (Random.Range(0, 25) == 3) { Messenger.Broadcast(GameEvent.BOSS_SPAWN_ALL); }
         else
         {
-            float action = Random.Range(1, 6);
+            float action = Random.Range(1, 7);
             int rounds = 0;
             switch (action)
             {
@@ -106,6 +114,9 @@ public class BossController : MonoBehaviour
                 case 5:
                     rounds = Random.Range(1, 3);
                     StartCoroutine(SummonAdds(rounds));
+                    break;
+                case 6:
+                    Messenger.Broadcast(GameEvent.EXPERIMENTAL_WEAPONS);
                     break;
             }
         }
@@ -153,8 +164,6 @@ public class BossController : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
-
-
 
     public void FireRandom(Transform pos) {
         GameObject ammunition = Instantiate(projectileList[Random.Range(0, projectileList.Length)]);

@@ -37,7 +37,6 @@ public class MeleeScript : MonoBehaviour
     }
 
     public void AdjustScale(float scale){
-        Debug.Log(scale);
         attackRange *= scale;
     }
     private void AdjustVolume()
@@ -62,7 +61,6 @@ public class MeleeScript : MonoBehaviour
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log("Hit");
                     hasHit = true;
                     float distance = Vector3.Distance(hit.transform.position, this.transform.position);
                     if(distance <= attackRange) {

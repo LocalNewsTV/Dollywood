@@ -18,4 +18,6 @@ public static class Tips
     public const string AREA_THREE_TIP = "Ascend the structure";
     public const string SURVIVE = "Survive...";
 
+    public const string PLAYTESTERS = "Thank you to all my Play testers.";
+
 }

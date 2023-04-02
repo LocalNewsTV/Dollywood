@@ -12,6 +12,7 @@ public class Rotate : MonoBehaviour
         RotateY,
         RotateX, 
         RotateZ,
+        RotateAll
     }
     // Update is called once per frame
     void Update()
@@ -24,6 +25,10 @@ public class Rotate : MonoBehaviour
         }
         else if(axis == Rotations.RotateX){
             transform.Rotate(new Vector3(8, 0, 0) * speed * Time.deltaTime, Space.World);
+        }
+        else if(axis == Rotations.RotateAll)
+        {
+            transform.Rotate(new Vector3(8, 8, 8) * speed * Time.deltaTime, Space.World);
         }
     }
 }
