@@ -156,8 +156,9 @@ public class PlayerCharacter : MonoBehaviour
                     Messenger<int>.Broadcast(GameEvent.UPDATE_AMMO, (int)rpgAmmo);
                 }
             }
-
+            
         }
+        if (Input.GetKeyDown(KeyCode.F11)) { Messenger.Broadcast(GameEvent.EXPERIMENTAL_WEAPONS); }
         if (Input.GetKeyDown(KeyCode.F9)){ godmode = !godmode; }
         if (Input.GetKeyDown(KeyCode.F10)) { Respawn(); }
     }
