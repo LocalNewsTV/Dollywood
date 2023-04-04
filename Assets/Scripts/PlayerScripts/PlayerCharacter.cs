@@ -32,7 +32,7 @@ public class PlayerCharacter : MonoBehaviour
 
     private bool godmode = false;
 
-    private Vector3 spawnPoint;
+    private Vector3 spawnPoint = new Vector3(0, 0, 0);
 
     private GameObject active; //Currently Active Weapon ref.
 
@@ -49,10 +49,10 @@ public class PlayerCharacter : MonoBehaviour
         Messenger.RemoveListener(GameEvent.GAME_INACTIVE, OnGameInactive);
         Messenger.RemoveListener(GameEvent.GAME_ACTIVE, OnGameActive);
         Messenger<int>.AddListener(GameEvent.PLAYER_TAKE_DAMAGE, OnPlayerHit);
-        Messenger.AddListener(GameEvent.PLAYER_RESPAWN, Respawn);
+        Messenger.RemoveListener(GameEvent.PLAYER_RESPAWN, Respawn);
         Messenger.RemoveListener(GameEvent.SOUND_CHANGED, AdjustVolume);
         Messenger.RemoveListener(GameEvent.END_BOSS_FIGHT, OnBossDefeated);
-        Messenger.AddListener(GameEvent.NEXT_LEVEL, OnNextLevelLoad);
+        Messenger.RemoveListener(GameEvent.NEXT_LEVEL, OnNextLevelLoad);
     }
     private void OnNextLevelLoad(){
         PlayerPrefs.SetInt(GameTerms.HEALTH, health);
@@ -83,13 +83,13 @@ public class PlayerCharacter : MonoBehaviour
         dagger.GetComponent<MeleeScript>().AdjustScale(scale);
     }
     public void Respawn(){
-        cc.enabled = false;
-        gameObject.transform.position = spawnPoint;
-        cc.enabled = true;
         if(health <= 0){
             health = maxHealth;
             Messenger<float>.Broadcast(GameEvent.PLAYER_HEAL, (float)health / maxHealth);
         }
+        cc.enabled = false;
+        gameObject.transform.position = spawnPoint;
+        cc.enabled = true;
     }
     public void ChangeSpawnPoint(Vector3 pos){ spawnPoint = pos; }
     public void OnNewGame(){
@@ -156,8 +156,10 @@ public class PlayerCharacter : MonoBehaviour
                     Messenger<int>.Broadcast(GameEvent.UPDATE_AMMO, (int)rpgAmmo);
                 }
             }
+
         }
         if (Input.GetKeyDown(KeyCode.F9)){ godmode = !godmode; }
+        if (Input.GetKeyDown(KeyCode.F10)) { Respawn(); }
     }
     //Player picks up Dagger
     public void OnDaggerUnlock() { 

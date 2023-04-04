@@ -181,7 +181,7 @@ public class ZombieAI : MonoBehaviour
     /// Turns when too close to walls
     /// </summary>
     void Update() {
-        rb.AddForce(Vector3.down * 9.81f);
+        rb.AddForce(Vector3.up * gravity);
         if (!inAnimation)
         {
             switch (state)
