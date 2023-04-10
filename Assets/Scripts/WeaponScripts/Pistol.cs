@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
-
+/// <summary>
+/// Controller for the Pistol Weapon
+/// </summary>
 public class Pistol : MonoBehaviour
 {
     [SerializeField] private GameObject casing;
@@ -21,17 +23,22 @@ public class Pistol : MonoBehaviour
     private void OnDestroy(){
         Messenger.RemoveListener(GameEvent.SOUND_CHANGED, AdjustVolume);
     }
+    /// <summary>
+    /// Adjust volume for Pistol based on player prefs
+    /// </summary>
     private void AdjustVolume() {
         sound.volume = PlayerPrefs.GetInt("sound") / 100.0f;
     }
-    private void Start()
-    {
+    private void Start(){
         fw = GetComponent<FireWeapon>();
         sound = GetComponent<AudioSource>();
         AdjustVolume();
     }
-    public bool Fire()
-    {
+    /// <summary>
+    /// Firing mechanism for Pistol, plays one of x sounds when fired, creates a casing 
+    /// </summary>
+    /// <returns>If bullet was successfully fired or not</returns>
+    public bool Fire() {
         if (timeSinceLastFire >= fireRate){
             sound.Stop();
             sound.PlayOneShot(sounds[Random.Range(0, sounds.Length)]);
@@ -42,12 +49,13 @@ public class Pistol : MonoBehaviour
         }
         return false;
     }
-    private void Update()
-    {
+    private void Update() {
         timeSinceLastFire += Time.deltaTime;
     }
-    void EjectShellFromPistol()
-    {
+    /// <summary>
+    /// Creates a bullet casing that ejects from the pistol
+    /// </summary>
+    void EjectShellFromPistol() {
             casingref = Instantiate(casing) as GameObject;
             casingref.transform.position = spawnPos.TransformPoint(0, 0, 0);
             casingref.transform.rotation = transform.rotation;

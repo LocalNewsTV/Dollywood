@@ -12,14 +12,17 @@ public class ArenaBounds : MonoBehaviour
     private void OnDestroy(){
         Messenger.RemoveListener(GameEvent.START_BOSS_FIGHT, OnStartBossFight);
     }
-    private void OnStartBossFight()
-    {
+    /// <summary>
+    /// Sets barrier of arena to become active so player doesnt' fall off the arena
+    /// </summary>
+    private void OnStartBossFight(){
         GetComponent<MeshCollider>().enabled = true;
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
+    /// <summary>
+    /// If Player hits the triggers, forces player to respawn
+    /// </summary>
+    private void OnTriggerEnter(Collider other){
+        if (other.CompareTag("Player")){
             other.GetComponent<PlayerCharacter>().Respawn();
         }
     }

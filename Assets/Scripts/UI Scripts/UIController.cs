@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
+/// <summary>
+/// Controller for the Main UI of the game, calls popups, and displays stats like health and ammo
+/// </summary>
 public class UIController : MonoBehaviour
 {
 
@@ -21,6 +24,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tipScreen3;
 
     [SerializeField] private Image[] screenIndicator;
+
+    private int tipCount = 0;
     private string blank = "";
     private int popupsActive = 0;
     // Start is called before the first frame update
@@ -64,64 +69,66 @@ public class UIController : MonoBehaviour
         Messenger.RemoveListener(GameEvent.PLAYER_DIED, OnPlayerDied);
         Messenger.RemoveListener(GameEvent.END_BOSS_FIGHT, OnEndBossFight);
     }
-    private void OnEndBossFight()
-    {
+    /// <summary>
+    /// Called when the boss fight finishes, allows the credits to roll
+    /// </summary>
+    private void OnEndBossFight(){
         hud.SetActive(false);
         credits.SetActive(true);
         credits.GetComponent<Animation>().Play();
         StartCoroutine(EndGame());
     }
+    /// <summary>
+    /// a delayed functinoality for the credits, will return to the main menu
+    /// </summary>
     private IEnumerator EndGame()
     {
         yield return new WaitForSeconds(60);
         Messenger.Broadcast(GameEvent.RETURN_TO_MAIN_MENU);
     }
-    public void OnTipReceived(string tip){
-        StartCoroutine(DisplayTip(tip));
-    }
-    private IEnumerator DisplayTip(string tip)
-    {
-        TextMeshProUGUI tipTarget;
-        if(tipScreen1.text == "") { tipTarget = tipScreen1; }
-        else if (tipScreen2.text == "") { tipTarget = tipScreen2; }
-        else if (tipScreen3.text == "") { tipTarget = tipScreen3; }
-        else { tipTarget = tipScreen1; }
+
+    public void OnTipReceived(string tip){ StartCoroutine(DisplayTip(tip)); }
+    /// <summary>
+    /// Iterates a switch statement to go between 3 possible positions for displaying a tip, so multiple tips can be displayed at once
+    /// </summary>
+    /// <param name="tip"> the string to display on the screen</param>
+    private IEnumerator DisplayTip(string tip){
+        tipCount++;
+        TextMeshProUGUI tipTarget = (tipCount % 3) switch
+        {
+            0 => tipScreen3,
+            1 => tipScreen1,
+            2 => tipScreen2,
+            _ => tipScreen1,
+        };
         tipTarget.text = tip;
         yield return new WaitForSeconds(5);
         tipTarget.text = blank;
+        tipCount--;
     }
-    private void OnFadeOut(){
-        StartCoroutine(FadeToBlack());
-    }
-    private void OnPlayerDied()
-    {
-        deathPopup.Open();
-        //deathPopup.PlayerDied();
-    }
+    private void OnFadeOut(){ StartCoroutine(FadeToBlack()); }
+    private void OnPlayerDied(){ deathPopup.Open(); }
+    /// <summary>
+    /// Fades border to Black when transitioning to new map
+    /// </summary>
     private IEnumerator FadeToBlack(){
         Color black = Color.black;
         foreach (Image indic in screenIndicator){
             indic.color = Color.black;
         }
-        for (int i = 0; i < 75; i++)
-        {
+        for (int i = 0; i < 75; i++){
             black.a += 0.01f;
-            foreach (Image indic in screenIndicator)
-            {
-                indic.color = black;
-            }
+            foreach (Image indic in screenIndicator) { indic.color = black; }
             yield return new WaitForSeconds(0.08f);
         }
     }
-    private void OnPlayerHeal(float percent){
-        UpdateHealthIcon(percent);
-    }
-    private void OnPickupAmmo(){
-        StartCoroutine(IndicateEvent(Color.blue));
-    }
-    private void OnHealthkitPickup(){
-        StartCoroutine(IndicateEvent(Color.green));
-    }
+    private void OnPlayerHeal(float percent){ UpdateHealthIcon(percent); }
+    private void OnPickupAmmo(){ StartCoroutine(IndicateEvent(Color.blue)); }
+    private void OnHealthkitPickup(){ StartCoroutine(IndicateEvent(Color.green)); }
+    /// <summary>
+    /// Flashes colour on the screen indicating a Pickup/Damage/Healing
+    /// </summary>
+    /// <param name="color">Colour to flash</param>
     private IEnumerator IndicateEvent(Color color)
     {
         color.a = 0;
@@ -135,8 +142,7 @@ public class UIController : MonoBehaviour
             }
             yield return new WaitForSeconds(0.0015f);
         }
-        for(int i = 0; i < 50; i++)
-        {
+        for(int i = 0; i < 50; i++) {
             color.a -= 0.01f;
             foreach (Image indic in screenIndicator) { 
                 indic.color = color;
@@ -146,45 +152,39 @@ public class UIController : MonoBehaviour
     }
     private void OnPopupOpened(){
         popupsActive++;
-        if (popupsActive > 0){
-            SetGameActive(false);   
-        }
+        if (popupsActive > 0){ SetGameActive(false); }
     }
     private void OnPopupClosed(){
         popupsActive--;
-        if (popupsActive == 0){
-            SetGameActive(true);
-        }
+        if (popupsActive == 0){ SetGameActive(true); }
     }
     void Start(){
         UpdateHealthIcon(1f);
         UpdateAmmoForMelee();
         SetGameActive(true);
     }
-    private void UpdateAmmo(int ammo){
-        ammoValueLabel.text = ammo.ToString();
-    }
-    private void UpdateAmmoForMelee(){
-        ammoValueLabel.text = "Infinite";
-    }
-    public void UpdateHealthIcon(float percent){
-        healthBar.fillAmount = percent;
-    }
+
+    ///Update calls for different values displayed in HUB
+    private void UpdateAmmo(int ammo){ ammoValueLabel.text = ammo.ToString(); }
+    private void UpdateAmmoForMelee(){ ammoValueLabel.text = "Infinite"; }
+    public void UpdateHealthIcon(float percent){ healthBar.fillAmount = percent; }
+
+    /// <summary>
+    /// response for when Player receives damage
+    /// </summary>
+    /// <param name="percent">new percentage of players HP to set health icon with</param>
     public void OnPlayerDamage(float percent){
         StartCoroutine(IndicateEvent(Color.red));
         UpdateHealthIcon(percent);
     }
-    public void SetGameActive(bool active)
-    {
-        if(active)
-        {
+    public void SetGameActive(bool active) {
+        if(active) {
             Messenger.Broadcast(GameEvent.GAME_ACTIVE);
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             crossHair.gameObject.SetActive(true);
-        } else
-        {
+        } else {
             Messenger.Broadcast(GameEvent.GAME_INACTIVE);
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
@@ -194,10 +194,7 @@ public class UIController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape) && popupsActive == 0){
-            optionsPopup.Open();
-        }
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.Escape) && popupsActive == 0){ optionsPopup.Open(); }
     }
 }

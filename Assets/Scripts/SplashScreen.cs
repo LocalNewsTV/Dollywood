@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+/// <summary>
+/// Script loaded in for the splash menu of the game, that promps a player to press Enter to get started
+/// Script sets all the playerprefs to their default value to give the feeling of a new game
+/// </summary>
 public class SplashScreen : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         PlayerPrefs.SetInt(GameTerms.SWORD_UNLOCKED, 0);

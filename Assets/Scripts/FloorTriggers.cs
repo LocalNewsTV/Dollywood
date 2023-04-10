@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script for all Pickup items, uses an Enumerator to track what pickup is what, to avoid having several scripts
+/// </summary>
 public class FloorTriggers : MonoBehaviour
 {
     [SerializeField] public triggers trig;

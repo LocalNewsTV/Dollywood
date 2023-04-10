@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class PlayerCharacter : MonoBehaviour
 {
-    
     [SerializeField] private GameObject pistol;
     [SerializeField] private GameObject rpg;
     [SerializeField] private GameObject dagger;
@@ -156,11 +156,8 @@ public class PlayerCharacter : MonoBehaviour
                     Messenger<int>.Broadcast(GameEvent.UPDATE_AMMO, (int)rpgAmmo);
                 }
             }
-            
         }
-        if (Input.GetKeyDown(KeyCode.F11)) { Messenger.Broadcast(GameEvent.EXPERIMENTAL_WEAPONS); }
         if (Input.GetKeyDown(KeyCode.F9)){ godmode = !godmode; }
-        if (Input.GetKeyDown(KeyCode.F10)) { Respawn(); }
     }
     //Player picks up Dagger
     public void OnDaggerUnlock() { 
