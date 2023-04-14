@@ -16,7 +16,7 @@ public class ZombieAI : MonoBehaviour
     private bool attackInProgress = false;
 
     //Ranges for Events
-    private float distanceToActive = 25f;
+    private float distanceToActive = 15f;
     private float obstacleRange = 1.5f;
     private float distanceToAttack = 4f;
     private float attackRange = 4f;
@@ -30,7 +30,7 @@ public class ZombieAI : MonoBehaviour
     private const float gravity = -9.81f;
     private float runSpeed = 12f;
     private float walkSpeed = 1.5f;
-    private bool inAnimation = false;
+    private int inAnimation = 0;
 
     //Sound Keys
     private AudioSource sound;
@@ -100,11 +100,11 @@ public class ZombieAI : MonoBehaviour
     }
 
     private IEnumerator Scream(){
-        inAnimation = true;
+        inAnimation++;
         PlaySound(sScreaming);
         anim.SetTrigger("Zombie_Scream_Trig");
         yield return new WaitForSeconds(2.8f);
-        inAnimation = false;
+        inAnimation--;
     }
 
     public float DistanceToPlayer() => Vector3.Distance(Player.transform.position, this.transform.position);
@@ -116,22 +116,22 @@ public class ZombieAI : MonoBehaviour
         lookPos.y = 0;
         var rotation = Quaternion.LookRotation(lookPos);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 0.5f);
-        if (!attackInProgress){
+        if (DistanceToPlayer() > attackRange) { ChangeState(EnemyStates.Active); }
+        if (!attackInProgress && DistanceToPlayer() <= attackRange){
             attackInProgress = true;
-            inAnimation = true;
+            inAnimation++;
             rb.velocity = Vector3.up * gravity;
             gameObject.transform.rotation = Quaternion.LookRotation(Player.transform.position - gameObject.transform.position);
             if (RandBool()){
-                anim.SetTrigger("AttackPlayer_B_trig");
-                PlaySound(sAttackingOne);
-                StartCoroutine(CheckIfHitPlayer(4.167f / 2f)); //Animation time cut in half
-            } else {
                 anim.SetTrigger("AttackPlayer_A_trig");
+                PlaySound(sAttackingOne);
+                StartCoroutine(CheckIfHitPlayer(4.167f / 2f));
+            } else {
+                anim.SetTrigger("AttackPlayer_B_trig");
                 PlaySound(sAttackingTwo);
                 StartCoroutine(CheckIfHitPlayer(1f));
             }
         }
-        if(DistanceToPlayer() > attackRange) { ChangeState(EnemyStates.Active); }
 
     }
     /// <summary>
@@ -182,7 +182,7 @@ public class ZombieAI : MonoBehaviour
     /// </summary>
     void Update() {
         rb.AddForce(Vector3.up * gravity);
-        if (!inAnimation)
+        if (inAnimation == 0)
         {
             switch (state)
             {
@@ -208,9 +208,6 @@ public class ZombieAI : MonoBehaviour
     /// <returns>Bool at 50% rate</returns>
     private bool RandBool(){ return Random.Range(0, 2) == 0; }
     public IEnumerator CheckIfHitPlayer(float animTime){
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.Sleep();
         float waitPeriod = 0.3f;
         yield return new WaitForSeconds(waitPeriod);
         if (state != EnemyStates.Dead && DistanceToPlayer() <= attackRange) {
@@ -218,7 +215,7 @@ public class ZombieAI : MonoBehaviour
         }
         yield return new WaitForSeconds(animTime - waitPeriod);
         attackInProgress = false;
-        inAnimation = false;
+        inAnimation--;
     }
     //Change State of Zombie AI
     public void ChangeState(EnemyStates state) => this.state = state;
@@ -245,7 +242,7 @@ public class ZombieAI : MonoBehaviour
     /// </summary>
     public IEnumerator ReactToHit()
     {
-        inAnimation = true;
+        inAnimation++;
         if (RandBool()){
             anim.SetTrigger("React_To_Hit_A_trig");
             PlaySound(sDamagedOne);
@@ -253,9 +250,9 @@ public class ZombieAI : MonoBehaviour
         } else {
             anim.SetTrigger("React_To_Hit_B_trig");
             PlaySound(sDamagedTwo);
-            yield return new WaitForSeconds(2.167f);
+            yield return new WaitForSeconds(2.167f /2f);
         }
-        inAnimation = false;
+        inAnimation--;
     }
 
     private void PlaySound(int soundClip) {
@@ -268,7 +265,7 @@ public class ZombieAI : MonoBehaviour
     /// Calls one of two death animations and deletes itself
     /// </summary>
     private IEnumerator Die(){
-        inAnimation = true;
+        inAnimation++;
         GetComponent<CapsuleCollider>().enabled = false;
         rb.useGravity = false;
         rb.isKinematic = true;

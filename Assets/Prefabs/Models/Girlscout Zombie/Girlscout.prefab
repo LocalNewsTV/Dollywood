@@ -1189,7 +1189,7 @@ CapsuleCollider:
   m_Radius: 0.27
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0.15}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &3632750938148814445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1223,7 +1223,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.32
   m_Speed: 3.5
-  m_Acceleration: 8
+  m_Acceleration: 500
   avoidancePriority: 50
   m_AngularSpeed: 500
   m_StoppingDistance: 2.5
@@ -1273,7 +1273,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0

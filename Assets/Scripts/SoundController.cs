@@ -26,12 +26,14 @@ public class SoundController : MonoBehaviour
     //Enable the boss music at the start of boss battle
     private void OnStartBossFight(){
         bgm.Stop();
-        bgm.PlayOneShot(songs[bossMusic]);
+        bgm.clip = songs[bossMusic];
+        bgm.Play();
     }
     //Swap songs upon defeat of the boss
     private void OnEndBossFight(){
         bgm.Stop();
-        bgm.PlayOneShot(songs[bossDefeat]);
+        bgm.clip = songs[bossDefeat]; 
+        bgm.Play();
     }
     //Adjust volume to what is stored in Player Preferences
     private void AdjustVolume(){ 
@@ -41,6 +43,8 @@ public class SoundController : MonoBehaviour
     //Start method, Adjust the volume and play the song matching the level
     void Start(){
         AdjustVolume();
-        bgm.PlayOneShot(songs[bgmIndex]);
+        bgm.clip = songs[bgmIndex];
+        bgm.Play();
     }
+
 }
